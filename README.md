@@ -117,3 +117,24 @@ Built by **CyberRush** — tools for creators and marketers who are serious abou
 - [ ] Mobile-responsive layout
 - [ ] Landing/marketing page
 - [ ] Stripe billing integration
+
+## Marketing TODOs
+
+- [ ] Add public landing page (hero, features, CTAs) — src/app/page.tsx
+- [ ] Per-page SEO: meta, canonical tags, structured data (schema.org)
+- [ ] Generate sitemap.xml and robots.txt
+- [ ] Add Open Graph & Twitter Card metadata for rich previews
+- [ ] Integrate analytics (GA4/Matomo) and conversion/event tracking
+- [ ] Cookie consent / GDPR consent manager and privacy page
+- [ ] Newsletter signup (double opt-in) + provider integration (Mailchimp/SendGrid)
+- [ ] Pricing & billing pages + Stripe integration for subscriptions/trials
+- [ ] Add testimonials, logos, and case studies sections
+- [ ] Create lead magnets / gated content flow
+- [ ] Public contact form and demo booking (Calendly integration)
+- [ ] A/B testing framework for landing pages
+- [ ] First-run onboarding / in-app product tour
+- [ ] Content hub / blog / FAQ for SEO and organic traffic
+- [ ] Social sharing buttons and referral hooks
+- [ ] CRM / Zapier / webhook integrations for leads API
+- [ ] Accessibility and Core Web Vitals improvements (Lighthouse audit)
+- [ ] Legal pages: Terms of Service, Privacy Policy, Refund Policy
