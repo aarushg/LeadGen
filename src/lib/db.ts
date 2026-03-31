@@ -32,9 +32,22 @@ export interface Proposal {
   updated_at: string
 }
 
+export interface Tool {
+  id: string
+  name: string
+  type: string
+  bestFor: string
+  keyFeatures: string[]
+  summary: string
+  website?: string
+  created_at: string
+  updated_at: string
+}
+
 interface DBData {
   leads: Lead[]
   proposals: Proposal[]
+  tools: Tool[]
 }
 
 // Serialise concurrent writes so the file is never clobbered
@@ -43,9 +56,14 @@ let writeQueue: Promise<void> = Promise.resolve()
 async function read(): Promise<DBData> {
   try {
     const raw = await readFile(DB_FILE, 'utf-8')
-    return JSON.parse(raw) as DBData
+    const parsed = JSON.parse(raw) as Partial<DBData>
+    return {
+      leads: parsed.leads ?? [],
+      proposals: parsed.proposals ?? [],
+      tools: parsed.tools ?? [],
+    }
   } catch {
-    return { leads: [], proposals: [] }
+    return { leads: [], proposals: [], tools: [] }
   }
 }
 
@@ -138,6 +156,45 @@ export const db = {
       if (state.proposals.length === before) return false
       await enqueueWrite(state)
       return true
+    },
+  },
+
+  tools: {
+    async list(): Promise<Tool[]> {
+      const { tools } = await read()
+      return [...tools].sort((a, b) => a.name.localeCompare(b.name))
+    },
+
+    async get(id: string): Promise<Tool | null> {
+      const { tools } = await read()
+      return tools.find(t => t.id === id) ?? null
+    },
+
+    async create(data: Omit<Tool, 'id' | 'created_at' | 'updated_at'>): Promise<Tool> {
+      const state = await read()
+      const now = new Date().toISOString()
+      const tool: Tool = { ...data, id: randomUUID(), created_at: now, updated_at: now }
+      state.tools.push(tool)
+      await enqueueWrite(state)
+      return tool
+    },
+
+    async seedIfEmpty(data: Array<Omit<Tool, 'id' | 'created_at' | 'updated_at'>>): Promise<Tool[]> {
+      const state = await read()
+      if (state.tools.length > 0) {
+        return [...state.tools].sort((a, b) => a.name.localeCompare(b.name))
+      }
+
+      const now = new Date().toISOString()
+      state.tools = data.map(item => ({
+        ...item,
+        id: randomUUID(),
+        created_at: now,
+        updated_at: now,
+      }))
+
+      await enqueueWrite(state)
+      return [...state.tools].sort((a, b) => a.name.localeCompare(b.name))
     },
   },
 }

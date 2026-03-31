@@ -47,6 +47,18 @@ Agencies are willing to pay **$1,000–$2,000** for a setup like this.
 
 ---
 
+### 4. Lead Generation Tools Library (Persisted)
+- 23 lead generation tools are stored as real app data (not static UI-only cards)
+- Tools are loaded from `GET /api/tools` and persisted in local storage (`data/db.json`)
+- Each tool has a dedicated in-app page: `/dashboard/tools/[id]`
+- Cards are actionable and support:
+	- Open in app (tool details page)
+	- Research fit flow (`/research?company=...`)
+	- Visit official vendor website
+- Includes searchable/filterable library and comparison workspace in `/dashboard/tools`
+
+---
+
 ## Tech Stack
 
 | Layer | Tech |
@@ -87,6 +99,11 @@ npm run dev
 ```
 
 LeadGen frontend runs on [http://localhost:3001](http://localhost:3001).
+
+### Local data persistence
+- Local app data is stored in `data/db.json`.
+- The tools library is seeded on first call to `/api/tools` if empty.
+- After seeding, tool records persist and are reused across sessions.
 
 ### 5. Start Auth/API backend (NurseApp style)
 Run your backend API separately on `http://localhost:4000`.
@@ -148,6 +165,7 @@ Built by **CyberRush** — tools for creators and marketers who are serious abou
 - [ ] PDF proposal export
 - [ ] Lead CRM with Kanban board
 - [ ] Dashboard stats and analytics
+- [x] Persisted lead tools library with in-app detail pages
 - [x] Auth (email + password via API/JWT cookies)
 - [ ] Mobile-responsive layout
 - [ ] Landing/marketing page

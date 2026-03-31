@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Search, FileText, Users, TrendingUp, Plus } from 'lucide-react'
+import { Search, FileText, Users, TrendingUp, Plus, LibraryBig } from 'lucide-react'
 import { db } from '@/lib/db'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
       </Card>
 
       {/* Quick actions */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Link href="/research" className="group">
           <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
             <CardContent className="flex flex-col items-center justify-center py-8 text-center">
@@ -155,6 +155,17 @@ export default async function DashboardPage() {
               </div>
               <p className="font-semibold">CRM</p>
               <p className="text-sm text-muted-foreground mt-1">Track leads through your pipeline</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/tools" className="group">
+          <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <LibraryBig className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-semibold">Tools Library</p>
+              <p className="text-sm text-muted-foreground mt-1">Compare top lead generation platforms</p>
             </CardContent>
           </Card>
         </Link>

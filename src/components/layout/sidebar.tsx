@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X } from 'lucide-react'
+import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/research', label: 'Lead Research', icon: Search },
+  { href: '/dashboard/tools', label: 'Tools Library', icon: LibraryBig },
   { href: '/proposals', label: 'Proposals', icon: FileText },
   { href: '/dashboard/leads', label: 'CRM', icon: Users },
   { href: '/settings', label: 'Settings', icon: Settings },

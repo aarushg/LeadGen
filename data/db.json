@@ -1,0 +1,351 @@
+{
+  "leads": [],
+  "proposals": [],
+  "tools": [
+    {
+      "name": "Salesforce Marketing Cloud",
+      "type": "Marketing Automation",
+      "bestFor": "Enterprise-level lead generation",
+      "keyFeatures": [
+        "AI-driven automation",
+        "Multi-channel marketing",
+        "Deep analytics"
+      ],
+      "summary": "Advanced multi-channel platform with AI scoring, segmentation, and strong CRM integration for scale.",
+      "website": "https://www.salesforce.com/products/marketing-cloud/overview/",
+      "id": "62daad5f-217c-48fa-b8c2-9fc559fed99e",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Leadfeeder",
+      "type": "Website Visitor Tracking",
+      "bestFor": "Turning website visitors into leads",
+      "keyFeatures": [
+        "Identifies website visitors",
+        "CRM integrations",
+        "Lead scoring"
+      ],
+      "summary": "Reveals anonymous company traffic and surfaces sales-ready website engagement signals.",
+      "website": "https://www.leadfeeder.com/",
+      "id": "37c5f389-4c48-4082-9dba-3421c6295169",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "UpLead",
+      "type": "B2B Contact Database",
+      "bestFor": "Finding verified B2B leads",
+      "keyFeatures": [
+        "Real-time contact verification",
+        "Extensive B2B database",
+        "Data enrichment"
+      ],
+      "summary": "Prospecting database focused on verified contact details and accurate outreach data.",
+      "website": "https://www.uplead.com/",
+      "id": "5997849f-b1da-47b2-84d6-11dd25b54c57",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Intercom",
+      "type": "Conversational Marketing",
+      "bestFor": "Live chat and inbound qualification",
+      "keyFeatures": [
+        "Live chat",
+        "AI chatbots",
+        "Customer engagement workflows"
+      ],
+      "summary": "Captures and qualifies inbound leads in real time through chat and bot automation.",
+      "website": "https://www.intercom.com/",
+      "id": "751228fd-72e7-40e9-83b3-d958677f7017",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Hunter",
+      "type": "Email Finder and Verifier",
+      "bestFor": "Finding and validating business emails",
+      "keyFeatures": [
+        "Email verification",
+        "Bulk searches",
+        "Domain search"
+      ],
+      "summary": "Simple and reliable option for outbound teams that need verified contact emails quickly.",
+      "website": "https://hunter.io/",
+      "id": "3b7dc8dc-e4b8-4947-810d-abd83e0e1a9a",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Demio",
+      "type": "Webinar Platform",
+      "bestFor": "Hosting lead-generating webinars",
+      "keyFeatures": [
+        "Interactive webinars",
+        "Automated follow-ups",
+        "Engagement analytics"
+      ],
+      "summary": "Webinar-first lead engine with registration flows, engagement tools, and post-event automation.",
+      "website": "https://demio.com/",
+      "id": "980cd7f2-a77f-4cd8-a844-2ebe3ed8be30",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Overloop",
+      "type": "Sales Engagement",
+      "bestFor": "Outbound sales and prospecting",
+      "keyFeatures": [
+        "Multi-channel outreach",
+        "Email tracking",
+        "Automation"
+      ],
+      "summary": "Outbound engagement platform combining sequence automation and cross-channel prospecting.",
+      "website": "https://overloop.com/",
+      "id": "52ed26bc-6f75-4bc5-9a07-a5f4abd06661",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "D&B Hoovers",
+      "type": "Business Database",
+      "bestFor": "B2B data enrichment",
+      "keyFeatures": [
+        "Financial firmographics",
+        "Decision-maker contacts",
+        "Analytics"
+      ],
+      "summary": "Deep company intelligence database useful for enterprise targeting and ABM programs.",
+      "website": "https://www.dnb.com/products/dnb-hoovers.html",
+      "id": "8cc2a8dc-f82b-44b1-b8a6-0d6a1c81b561",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Agile CRM",
+      "type": "CRM",
+      "bestFor": "All-in-one CRM for small businesses",
+      "keyFeatures": [
+        "Sales automation",
+        "Marketing integrations",
+        "Email tracking"
+      ],
+      "summary": "Affordable CRM with built-in lead management, workflows, and campaign support.",
+      "website": "https://www.agilecrm.com/",
+      "id": "05c6de6d-9c0c-4466-969e-85fefc4768d4",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "CallPage",
+      "type": "Call Tracking and Engagement",
+      "bestFor": "Boosting inbound calls and conversions",
+      "keyFeatures": [
+        "Instant callback tools",
+        "Conversion optimization",
+        "Call tracking"
+      ],
+      "summary": "Converts high-intent website visitors via immediate callback capture and routing.",
+      "website": "https://www.callpage.io/",
+      "id": "c607f930-468b-4159-8095-4ff1043c0518",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "AeroLeads",
+      "type": "Lead Prospecting",
+      "bestFor": "Finding contact details",
+      "keyFeatures": [
+        "Verified contact data",
+        "Lead enrichment",
+        "CRM sync"
+      ],
+      "summary": "Prospecting assistant for extracting and validating contact data across web sources.",
+      "website": "https://aeroleads.com/",
+      "id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "LeadFuze",
+      "type": "AI Lead Sourcing",
+      "bestFor": "Automating prospect list creation",
+      "keyFeatures": [
+        "Automated sourcing",
+        "ABM targeting",
+        "Data validation"
+      ],
+      "summary": "AI-assisted list builder that continuously delivers leads based on targeting rules.",
+      "website": "https://www.leadfuze.com/",
+      "id": "d87128e1-3a1c-4fa9-9809-0b299897d049",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "LeadsBridge",
+      "type": "Lead Integration",
+      "bestFor": "Syncing ad and CRM lead data",
+      "keyFeatures": [
+        "Real-time lead syncing",
+        "Audience retargeting",
+        "Attribution insights"
+      ],
+      "summary": "Bridge between paid channels and CRM systems to automate handoff and attribution.",
+      "website": "https://leadsbridge.com/",
+      "id": "186c592d-e6db-42b9-bf45-8974204b8695",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "SalesWings",
+      "type": "Lead Scoring and Qualification",
+      "bestFor": "Salesforce-native lead and account scoring",
+      "keyFeatures": [
+        "Behavior tracking",
+        "Predictive scoring",
+        "Real-time alerts"
+      ],
+      "summary": "Salesforce-native scoring layer for first-party intent, fit grading, and sales alerts.",
+      "website": "https://www.saleswingsapp.com/",
+      "id": "63cea4ad-ca48-46b6-95a6-8356a116ccbe",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "OptinMonster",
+      "type": "Lead Capture and Forms",
+      "bestFor": "Website pop-ups and lead forms",
+      "keyFeatures": [
+        "Exit-intent technology",
+        "Visual campaign builder",
+        "A/B testing"
+      ],
+      "summary": "Website conversion toolkit that turns visitor intent signals into captured leads.",
+      "website": "https://optinmonster.com/",
+      "id": "de370d85-7340-4380-a334-95e4414cbde2",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Dealfront",
+      "type": "B2B Lead Intelligence",
+      "bestFor": "Tracking visitors and buyer intent",
+      "keyFeatures": [
+        "Visitor identification",
+        "Intent data",
+        "Lead enrichment"
+      ],
+      "summary": "Combines visitor intel and intent signals to help teams target accounts earlier.",
+      "website": "https://www.dealfront.com/",
+      "id": "8de6fb8f-839b-404f-bdce-47bf397b54fd",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Sumo",
+      "type": "List Building and Pop-Ups",
+      "bestFor": "Growing email lists from website traffic",
+      "keyFeatures": [
+        "Smart popups",
+        "Exit-intent detection",
+        "Email follow-ups"
+      ],
+      "summary": "Inbound list-growth toolkit with lightweight forms and engagement prompts.",
+      "website": "https://sumo.com/",
+      "id": "7188214e-75a3-482c-a0e5-f7dfb3ef6fb1",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Extole",
+      "type": "Referral Marketing",
+      "bestFor": "Turning customers into advocates",
+      "keyFeatures": [
+        "Referral programs",
+        "Reward automation",
+        "Fraud prevention"
+      ],
+      "summary": "Referral engine for customer-led lead generation and advocacy campaigns.",
+      "website": "https://www.extole.com/",
+      "id": "631294f0-6a87-417e-a22b-a434c9fd3a8c",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "RollWorks",
+      "type": "Account-Based Marketing",
+      "bestFor": "Targeting high-value accounts",
+      "keyFeatures": [
+        "Account targeting",
+        "Intent data tracking",
+        "Automated scoring"
+      ],
+      "summary": "ABM platform focused on account selection, orchestration, and conversion tracking.",
+      "website": "https://www.rollworks.com/",
+      "id": "bb86e7e1-8a18-4e60-b737-767c209041f8",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Pipedrive",
+      "type": "CRM",
+      "bestFor": "Sales pipeline management",
+      "keyFeatures": [
+        "Visual pipeline",
+        "Deal tracking",
+        "Automation tools"
+      ],
+      "summary": "Sales-centric CRM with clear pipeline visibility and practical automation features.",
+      "website": "https://www.pipedrive.com/",
+      "id": "6f721c86-f5d0-4284-9e10-2c204447ede8",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Zendesk Sell",
+      "type": "CRM and Sales Automation",
+      "bestFor": "Sales team automation",
+      "keyFeatures": [
+        "Lead scoring",
+        "Email automation",
+        "Pipeline tracking"
+      ],
+      "summary": "CRM with built-in communication and workflow tooling for sales execution.",
+      "website": "https://www.zendesk.com/sell/",
+      "id": "a54c890c-cbef-4b66-9e3d-8c27e600ee26",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "HubSpot Marketing Hub",
+      "type": "Marketing Automation",
+      "bestFor": "Inbound marketing and automation",
+      "keyFeatures": [
+        "Email campaigns",
+        "Lead tracking",
+        "CRM integration"
+      ],
+      "summary": "Inbound-focused automation platform combining content, workflows, and CRM connectivity.",
+      "website": "https://www.hubspot.com/products/marketing",
+      "id": "346aea3e-0e94-42ef-bbe5-4547d1dbb7d1",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    },
+    {
+      "name": "Mailchimp",
+      "type": "Email Marketing",
+      "bestFor": "Automated email marketing",
+      "keyFeatures": [
+        "Triggered sequences",
+        "Audience segmentation",
+        "A/B testing"
+      ],
+      "summary": "Email-first automation platform for audience growth, nurturing, and campaign optimization.",
+      "website": "https://mailchimp.com/",
+      "id": "e13fa569-55fb-4111-858f-c8a174cd15d7",
+      "created_at": "2026-03-31T01:08:31.725Z",
+      "updated_at": "2026-03-31T01:08:31.725Z"
+    }
+  ]
+}
