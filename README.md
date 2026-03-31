@@ -56,7 +56,8 @@ Agencies are willing to pay **$1,000–$2,000** for a setup like this.
 | Styling | Tailwind CSS + shadcn/ui |
 | AI | Claude API (claude-sonnet-4-6) |
 | Research | Tavily API (web search) |
-| Database | Supabase (Postgres + Auth) |
+| Database | Supabase (Postgres) |
+| Auth | API backend (JWT + HTTP-only cookies) |
 | PDF Export | @react-pdf/renderer |
 | Mobile | Fully responsive — works on any device |
 
@@ -72,9 +73,7 @@ npm install
 ### 2. Configure environment variables
 Create a `.env.local` file:
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
 ANTHROPIC_API_KEY=your_anthropic_api_key
 TAVILY_API_KEY=your_tavily_api_key
 ```
@@ -87,7 +86,43 @@ Run the SQL in `supabase/migrations/001_initial_schema.sql` in your Supabase pro
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+LeadGen frontend runs on [http://localhost:3001](http://localhost:3001).
+
+### 5. Start Auth/API backend (NurseApp style)
+Run your backend API separately on `http://localhost:4000`.
+
+Example backend env:
+```env
+PORT=4000
+APP_ORIGIN=http://localhost:3001
+```
+
+### 6. Authentication routes
+- `http://localhost:3001/login` → Sign in
+- `http://localhost:3001/signin` → Alias to sign in
+- `http://localhost:3001/signup` → Create account
+- `http://localhost:3001/reset` → Redirects to login
+
+Auth expects these backend endpoints:
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/me`
+- Optional: `POST /api/auth/refresh`
+
+Login screen is simplified:
+- Title: `Login`
+- Fields: `Username`, `Password`
+- Action: `Login`
+
+Signup screen is simplified:
+- Title: `Signup`
+- Fields: `Username`, `Password`
+- Action: `Create account`
+- Includes a link back to `/login`
+
+Demo mode behavior:
+- New demo signups are stored locally in the browser.
+- You can log in using the same username/password you just created.
 
 ---
 
@@ -113,7 +148,7 @@ Built by **CyberRush** — tools for creators and marketers who are serious abou
 - [ ] PDF proposal export
 - [ ] Lead CRM with Kanban board
 - [ ] Dashboard stats and analytics
-- [ ] Auth (email + Google OAuth)
+- [x] Auth (email + password via API/JWT cookies)
 - [ ] Mobile-responsive layout
 - [ ] Landing/marketing page
 - [ ] Stripe billing integration
