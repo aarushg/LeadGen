@@ -14,8 +14,8 @@ Every business wants more leads. This suite gives them the tools to find, resear
 
 ### 1. Lead Research & Outreach Engine
 Give it a target company or contact and it does the heavy lifting:
-- Searches across social media, LinkedIn, recent news, and the company website
-- Builds a full intelligence brief: company background, contact profile, pain points, recent moves
+- Searches across social media, LinkedIn, recent news, and the company website (via Tavily)
+- Builds a full intelligence brief: company background, contact profile, pain points, recent moves, conversation hooks
 - Writes a **personalized outreach message** based on real, specific angles from the research
 - Supports multiple tones (professional, casual, direct, warm) and channels (email, LinkedIn, Twitter/X)
 
@@ -24,26 +24,27 @@ Sales teams are paying **$2,000–$3,000** for a setup like this.
 ---
 
 ### 2. Proposal Generator
-Client fills out a short intake form. The app spits out a complete, formatted proposal — ready to send.
+Client fills out a short 4-step intake form. The app generates a complete, formatted proposal — ready to send.
 
 Includes:
-- Executive summary
-- Scope of work
+- Executive summary + problem statement
+- Scope of work + proposed solution
 - Deliverables list
 - Week-by-week timeline
-- Pricing table
-- Terms and call to action
-- PDF export
+- Pricing table with totals
+- Payment terms
+- Why us + next steps + T&Cs
 
 Agencies are willing to pay **$1,000–$2,000** for a setup like this.
 
 ---
 
 ### 3. Lead Dashboard & CRM
-- Full lead database with status tracking
-- Kanban board (drag-and-drop pipeline: New → Contacted → Replied → Closed)
-- Notes, tags, and activity history per lead
-- Stats: total leads, contacted this week, reply rate, proposals sent
+- Full lead database with status tracking (New → Researched → Contacted → Replied → Qualified → Won/Lost)
+- Stats bar: total leads, researched, contacted, proposals sent
+- Notes per lead (auto-saved)
+- Research history + intelligence brief per lead
+- Quick link from lead to proposal generator
 
 ---
 
@@ -91,13 +92,69 @@ Integrated lead generation and marketing tools built directly into the app. Acce
 |---|---|
 | Framework | Next.js 15 (App Router) |
 | Language | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui |
-| AI | Claude API (claude-sonnet-4-6) |
+| Styling | Tailwind CSS (dark theme) |
+| AI | Claude API (`claude-sonnet-4-6`) |
 | Research | Tavily API (web search) |
+<<<<<<< Updated upstream
 | Database | Supabase (Postgres) |
 | Auth | API backend (JWT + HTTP-only cookies) |
 | PDF Export | @react-pdf/renderer |
 | Mobile | Fully responsive — works on any device |
+=======
+| Database | Supabase (Postgres + Auth + RLS) |
+| Mobile | Fully responsive + bottom nav on mobile |
+| Auth | Supabase Auth (email/password + Google OAuth) |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx                        # Landing page
+│   ├── (auth)/
+│   │   ├── login/page.tsx              # Sign in
+│   │   ├── signup/page.tsx             # Sign up
+│   │   └── callback/route.ts           # OAuth callback
+│   ├── (dashboard)/
+│   │   ├── layout.tsx                  # Sidebar + mobile nav shell
+│   │   ├── dashboard/page.tsx          # CRM overview + stats
+│   │   ├── research/
+│   │   │   ├── page.tsx                # Lead research + outreach composer
+│   │   │   └── [leadId]/page.tsx       # Individual lead detail
+│   │   ├── proposals/
+│   │   │   ├── page.tsx                # Proposals list
+│   │   │   ├── new/page.tsx            # 4-step intake wizard
+│   │   │   └── [proposalId]/page.tsx   # Full proposal view
+│   │   └── settings/page.tsx           # Profile + API key info
+│   └── api/
+│       ├── research/route.ts           # POST: Tavily + Claude research
+│       ├── outreach/route.ts           # POST: Claude outreach message
+│       ├── leads/route.ts              # GET/POST leads
+│       ├── leads/[id]/route.ts         # GET/PUT/DELETE lead
+│       ├── proposals/route.ts          # GET/POST proposals
+│       └── proposals/[id]/route.ts     # GET/PUT/DELETE proposal
+├── components/
+│   ├── layout/
+│   │   ├── Sidebar.tsx                 # Desktop nav sidebar
+│   │   └── MobileNav.tsx              # Bottom tab bar (mobile)
+│   └── ...
+├── lib/
+│   ├── claude.ts                       # Anthropic SDK + AI prompts
+│   ├── tavily.ts                       # Tavily web search wrapper
+│   ├── supabase/client.ts              # Browser Supabase client
+│   ├── supabase/server.ts              # Server Supabase client
+│   ├── validations.ts                  # Zod schemas
+│   └── utils.ts                        # Helpers
+├── types/
+│   ├── lead.ts                         # Lead types + status colors
+│   └── proposal.ts                     # Proposal types + labels
+└── middleware.ts                        # Auth route protection
+supabase/
+└── migrations/001_initial_schema.sql   # Full DB schema + RLS
+```
+>>>>>>> Stashed changes
 
 ---
 
@@ -109,15 +166,28 @@ npm install
 ```
 
 ### 2. Configure environment variables
-Create a `.env.local` file:
+Copy `.env.example` to `.env.local` and fill in:
 ```env
+<<<<<<< Updated upstream
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
+=======
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+>>>>>>> Stashed changes
 ANTHROPIC_API_KEY=your_anthropic_api_key
 TAVILY_API_KEY=your_tavily_api_key
 ```
 
-### 3. Run the database migration
-Run the SQL in `supabase/migrations/001_initial_schema.sql` in your Supabase project.
+Get your keys:
+- **Anthropic**: [console.anthropic.com](https://console.anthropic.com)
+- **Tavily**: [tavily.com](https://tavily.com) (free tier available)
+- **Supabase**: [supabase.com](https://supabase.com) (free tier available)
+
+### 3. Set up the database
+1. Create a new Supabase project
+2. Go to **SQL Editor** in your Supabase dashboard
+3. Paste and run the contents of `supabase/migrations/001_initial_schema.sql`
 
 ### 4. Start the dev server
 ```bash
@@ -169,6 +239,23 @@ Demo mode behavior:
 
 ---
 
+## How the AI Pipeline Works
+
+### Lead Research
+1. User enters company name + optional contact name
+2. App runs **5 parallel Tavily searches**: company overview, recent news, LinkedIn/contact background, tech stack, pain points
+3. All results are deduplicated and formatted
+4. **Claude synthesizes** a structured intelligence brief: company summary, pain points, conversation hooks, recent news, funding stage
+5. User picks tone + channel → Claude writes a **personalized outreach message**
+
+### Proposal Generator
+1. User fills 4-step intake form: client info → project type → goals/budget/timeline → review
+2. **Claude generates** a full structured proposal: exec summary, deliverables, timeline, pricing, terms
+3. Saved to Supabase, viewable as formatted document
+4. Status tracking: Draft → Sent → Accepted/Rejected
+
+---
+
 ## Business Model
 
 This platform is designed to be sold as a **done-for-you setup service** to agencies and sales teams:
@@ -185,10 +272,17 @@ Built by **CyberRush** — tools for creators and marketers who are serious abou
 
 ## Roadmap
 
-- [ ] Lead research pipeline (Tavily + Claude)
-- [ ] Personalized outreach message generator
-- [ ] Proposal intake form + AI generation
+- [x] Lead research pipeline (Tavily + Claude)
+- [x] Personalized outreach message generator (5 tones, 3 channels)
+- [x] Proposal intake form + AI generation
+- [x] Proposal detail view (full formatted document)
+- [x] Lead CRM with status tracking
+- [x] Dashboard stats and recent activity
+- [x] Auth (email + Google OAuth)
+- [x] Mobile-responsive layout + bottom nav
+- [x] Landing/marketing page
 - [ ] PDF proposal export
+<<<<<<< Updated upstream
 - [ ] Lead CRM with Kanban board
 - [ ] Dashboard stats and analytics
 - [x] Persisted lead tools library with in-app detail pages
@@ -217,3 +311,9 @@ Built by **CyberRush** — tools for creators and marketers who are serious abou
 - [ ] CRM / Zapier / webhook integrations for leads API
 - [ ] Accessibility and Core Web Vitals improvements (Lighthouse audit)
 - [ ] Legal pages: Terms of Service, Privacy Policy, Refund Policy
+=======
+- [ ] Kanban board (drag-and-drop pipeline)
+- [ ] Bulk lead import (CSV)
+- [ ] Email sending integration
+- [ ] Stripe billing
+>>>>>>> Stashed changes

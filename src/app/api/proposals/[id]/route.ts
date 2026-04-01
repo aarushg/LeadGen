@@ -1,24 +1,5 @@
-<<<<<<< Updated upstream
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const body = await req.json()
-  const lead = await db.leads.update(id, body)
-  if (!lead) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json({ lead })
-}
-
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const deleted = await db.leads.delete(id)
-  if (!deleted) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return new NextResponse(null, { status: 204 })
-=======
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { updateLeadSchema } from "@/lib/validations";
 
 export async function GET(
   req: NextRequest,
@@ -31,7 +12,7 @@ export async function GET(
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { data, error } = await supabase
-      .from("leads")
+      .from("proposals")
       .select("*")
       .eq("id", id)
       .eq("user_id", user.id)
@@ -39,7 +20,7 @@ export async function GET(
 
     if (error || !data) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    return NextResponse.json({ lead: data });
+    return NextResponse.json({ proposal: data });
   } catch {
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
@@ -56,14 +37,10 @@ export async function PUT(
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
-    const parsed = updateLeadSchema.partial().safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
-    }
 
     const { data, error } = await supabase
-      .from("leads")
-      .update(parsed.data)
+      .from("proposals")
+      .update(body)
       .eq("id", id)
       .eq("user_id", user.id)
       .select()
@@ -71,7 +48,7 @@ export async function PUT(
 
     if (error) throw error;
 
-    return NextResponse.json({ lead: data });
+    return NextResponse.json({ proposal: data });
   } catch {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
@@ -88,7 +65,7 @@ export async function DELETE(
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { error } = await supabase
-      .from("leads")
+      .from("proposals")
       .delete()
       .eq("id", id)
       .eq("user_id", user.id);
@@ -99,5 +76,4 @@ export async function DELETE(
   } catch {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
->>>>>>> Stashed changes
 }
