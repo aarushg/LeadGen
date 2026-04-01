@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { AlertCircle, Loader, Download, Download2, Copy } from 'lucide-react'
+import { AlertCircle, Loader, Download, Copy } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface Lead {
@@ -257,7 +257,7 @@ export default function LeadFuzePage() {
                   Copy Emails
                 </Button>
                 <Button variant="outline" size="sm" onClick={downloadAsCSV}>
-                  <Download2 className="h-4 w-4 mr-2" />
+                  <Download className="h-4 w-4 mr-2" />
                   CSV
                 </Button>
               </div>
