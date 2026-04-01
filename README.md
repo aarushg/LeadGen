@@ -47,15 +47,41 @@ Agencies are willing to pay **$1,000–$2,000** for a setup like this.
 
 ---
 
-### 4. Lead Generation Tools Library (Persisted)
-- 23 lead generation tools are stored as real app data (not static UI-only cards)
-- Tools are loaded from `GET /api/tools` and persisted in local storage (`data/db.json`)
-- Each tool has a dedicated in-app page: `/dashboard/tools/[id]`
-- Cards are actionable and support:
-	- Open in app (tool details page)
-	- Research fit flow (`/research?company=...`)
-	- Visit official vendor website
-- Includes searchable/filterable library and comparison workspace in `/dashboard/tools`
+### 4. AI-Powered Tools Library (In Development)
+Integrated lead generation and marketing tools built directly into the app. Access from **AI Tools** in the sidebar.
+
+**✅ Implemented Tools (19/23):**
+- ✅ **Hunter - Email Finder** - Find professional email addresses for any domain
+- ✅ **UpLead - Contact Enrichment** - Verify and enrich contacts with B2B data
+- ✅ **Overloop - Email Sequences** - Create and automate multi-step email campaigns
+- ✅ **LeadFuze - AI Lead Sourcing** - AI-powered prospect list generation
+- ✅ **SalesWings - Lead Scoring** - Automatic lead qualification and prioritization
+- ✅ **Mailchimp - Email Campaigns** - Email marketing creation and delivery
+- ✅ **OptinMonster - Form Builder** - Drag-and-drop lead capture forms & pop-ups
+- ✅ **Demio - Webinar Scheduler** - Create and host webinars for lead generation
+- ✅ **Intercom - Live Chat** - Real-time chat and customer engagement
+- ✅ **CallPage - Call Tracking** - Phone number tracking and call analytics
+- ✅ **Leadfeeder - Visitor Intelligence** - B2B company tracking on website
+- ✅ **AeroLeads - B2B Email Finder** - Verified professional email database
+- ✅ **RollWorks - Account-Based Marketing** - Target and prioritize high-value accounts
+- ✅ **Pipedrive - Sales CRM** - Sales pipeline management and deal tracking
+- ✅ **HubSpot Marketing Hub** - Marketing automation and CRM platform
+- ✅ **Zendesk Sell - Sales CRM** - Account management and activity tracking
+- ✅ **Apollo.io - B2B Lead Database** - Prospect discovery and email verification
+- ✅ **Salesforce Marketing Cloud** - Enterprise campaign orchestration across channels
+- ✅ **Extole - Referral and Advocacy Platform** - Referral programs, advocate tracking, and rewards
+
+**Coming Next (4 remaining):**
+- D&B Hoovers - Company intelligence and firmographics
+- Agile CRM - Contact management and automation
+- LeadsBridge - Ad and CRM integrations
+- ... and 1 more tool from the Tools Library
+
+### 5. Shared Persistence + Unified Tool Analytics
+- Tool states are now stored in the database-backed JSON store via `/api/tools/state/[toolId]`.
+- Tool events are tracked via `/api/tools/analytics` for usage/performance analysis.
+- A unified dashboard at `/dashboard/tools-features/analytics` compares activity across all implemented tools.
+- Previously client-only tools now persist data across refreshes/restarts (SalesWings, Mailchimp, OptinMonster, Demio, Intercom, CallPage, Leadfeeder, RollWorks, Pipedrive, HubSpot, Zendesk, Overloop, Extole).
 
 ---
 
