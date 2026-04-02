@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic()
+import { randomUUID } from 'crypto'
+import { runToolByName } from '@/lib/tool-runner'
+import { getToolProfile } from '@/lib/tool-profiles'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,51 +14,34 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const prompt = `Generate a list of 5-8 realistic B2B professional email addresses for people with the job title "${title}" at company "${company}". 
-    
-For each email, provide:
-- Email address (realistic format)
-- First name
-- Last name
-- Job title
-- Company name
-- Confidence score (70-100)
-- Source (e.g., "Corporate Directory", "LinkedIn", "Business Registration")
-
-Return as JSON array with properties: email, firstName, lastName, title, company, confidence (number), source, linkedinURL (optional).
-
-Make the data realistic and believable.`
-
-    const message = await client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
+    const execution = await runToolByName('AeroLeads', {
+      company,
+      title,
+      seniority,
+      searchTerm: title,
+      maxResults: 8,
     })
 
-    const responseText =
-      message.content[0].type === 'text' ? message.content[0].text : ''
-
-    // Extract JSON from response
-    const jsonMatch = responseText.match(/\[[\s\S]*\]/)
-    const results = jsonMatch ? JSON.parse(jsonMatch[0]) : []
+    const results = (execution.output.records as Array<Record<string, unknown>>) ?? []
+    const legacyLeads = (execution.output.leads as Array<Record<string, unknown>>) ?? []
+    const discovery = execution.output.discovery ?? null
 
     return NextResponse.json({
-      results: results.map((r: any) => ({
-        id: `aerolead-${Math.random().toString(36).substr(2, 9)}`,
+      profile: getToolProfile('AeroLeads'),
+      result: execution.output,
+      records: results,
+      results: legacyLeads.map((r: any) => ({
+        id: randomUUID(),
         email: r.email || '',
         firstName: r.firstName || '',
         lastName: r.lastName || '',
         title: r.title || title,
         company: r.company || company,
-        confidence: r.confidence || 85,
-        source: r.source || 'Database Match',
-        linkedinURL: r.linkedinURL,
+        confidence: Number(r.confidence ?? 0),
+        source: r.source || '',
+        linkedinURL: r.linkedinURL || r.url,
       })),
+      discovery,
     })
   } catch (error) {
     console.error('AeroLeads search failed:', error)

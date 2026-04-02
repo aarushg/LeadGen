@@ -64,7 +64,7 @@ export default function SettingsPage() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001'
 
   const dbExists = existsSync(join(process.cwd(), 'data', 'db.json'))
-  const allOk = isConfigured(anthropicKey) && isConfigured(tavilyKey)
+  const allOk = isConfigured(anthropicKey)
 
   return (
     <div className="max-w-3xl space-y-8">
@@ -81,7 +81,7 @@ export default function SettingsPage() {
               <div className="space-y-1">
                 <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Setup incomplete</p>
                 <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                  Add the missing keys to <code className="text-xs">.env.local</code>, then restart the dev server.
+                  Add the missing keys to <code className="text-xs">.env.local</code>, then restart the dev server. Tavily improves search coverage but public web discovery can still run without it.
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ export default function SettingsPage() {
           <EnvRow
             name="TAVILY_API_KEY"
             value={tavilyKey}
-            description="Web search used during lead research to pull live company data"
+            description="Optional: improves web search coverage for lead research and tool discovery"
           />
           <EnvRow
             name="NEXT_PUBLIC_APP_URL"
@@ -177,7 +177,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Step 2 — Get your Tavily API key</CardTitle>
-          <CardDescription>Provides live web search results during lead research. Free tier available.</CardDescription>
+          <CardDescription>Optional but recommended. Improves live web search coverage during lead research and tool discovery.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <Step n={1} title="Sign up for Tavily">

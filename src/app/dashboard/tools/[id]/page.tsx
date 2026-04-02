@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import type { ToolImplementation } from '@/lib/tool-implementations'
@@ -30,6 +31,9 @@ export default function ToolDetailsPage() {
   const [tool, setTool] = useState<Tool | null>(null)
   const [implementation, setImplementation] = useState<ToolImplementation | null>(null)
   const [loading, setLoading] = useState(true)
+  const [runInput, setRunInput] = useState('{}')
+  const [running, setRunning] = useState(false)
+  const [runResult, setRunResult] = useState<Record<string, unknown> | null>(null)
 
   useEffect(() => {
     async function loadToolData() {
@@ -75,6 +79,35 @@ export default function ToolDetailsPage() {
 
   if (!tool) {
     notFound()
+  }
+
+  async function executeInAppTool() {
+    try {
+      setRunning(true)
+      let parsedInput: Record<string, unknown> = {}
+      if (runInput.trim()) {
+        parsedInput = JSON.parse(runInput)
+      }
+
+      const response = await fetch(`/api/tools/${id}/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: parsedInput }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data.error || 'Execution failed')
+      }
+
+      const data = await response.json()
+      setRunResult((data.result as Record<string, unknown>) ?? null)
+      toast.success('Tool executed with in-app API')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Invalid input JSON')
+    } finally {
+      setRunning(false)
+    }
   }
 
   return (
@@ -154,6 +187,32 @@ export default function ToolDetailsPage() {
               </li>
             ))}
           </ul>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">In-App Tool Execution (Custom API)</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Run this tool through LeadGen's internal endpoint: <span className="font-mono">/api/tools/{id}/run</span>
+          </p>
+          <Textarea
+            value={runInput}
+            onChange={(e) => setRunInput(e.target.value)}
+            rows={6}
+            placeholder='{"domain":"acme.com","firstName":"Alex","lastName":"Stone"}'
+          />
+          <Button onClick={executeInAppTool} disabled={running}>
+            {running ? 'Executing...' : 'Run In-App Tool'}
+          </Button>
+
+          {runResult && (
+            <pre className="text-xs bg-muted rounded p-3 overflow-x-auto border">
+              {JSON.stringify(runResult, null, 2)}
+            </pre>
+          )}
         </CardContent>
       </Card>
 
@@ -346,6 +405,9 @@ export default function ToolDetailsPage() {
       <div className="flex gap-2 flex-wrap">
         <Button asChild>
           <Link href={`/research?company=${encodeURIComponent(tool.name)}`}>Research This Tool</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/dashboard/tools/analytics">Open Tool Analytics</Link>
         </Button>
         <Button asChild variant="outline">
           <Link href="/dashboard/leads">Open CRM</Link>

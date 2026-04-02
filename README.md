@@ -47,10 +47,10 @@ Agencies are willing to pay **$1,000–$2,000** for a setup like this.
 
 ---
 
-### 4. AI-Powered Tools Library (In Development)
-Integrated lead generation and marketing tools built directly into the app. Access from **AI Tools** in the sidebar.
+### 4. AI-Powered Tools Library (Fully Implemented)
+Integrated lead generation and marketing tools built directly into the app. Access from **Tools Library** in the sidebar.
 
-**✅ Implemented Tools (19/23):**
+**✅ Implemented Tools Library Coverage (23/23) + 1 Bonus Tool:**
 - ✅ **Hunter - Email Finder** - Find professional email addresses for any domain
 - ✅ **UpLead - Contact Enrichment** - Verify and enrich contacts with B2B data
 - ✅ **Overloop - Email Sequences** - Create and automate multi-step email campaigns
@@ -70,18 +70,19 @@ Integrated lead generation and marketing tools built directly into the app. Acce
 - ✅ **Apollo.io - B2B Lead Database** - Prospect discovery and email verification
 - ✅ **Salesforce Marketing Cloud** - Enterprise campaign orchestration across channels
 - ✅ **Extole - Referral and Advocacy Platform** - Referral programs, advocate tracking, and rewards
-
-**Coming Next (4 remaining):**
-- D&B Hoovers - Company intelligence and firmographics
-- Agile CRM - Contact management and automation
-- LeadsBridge - Ad and CRM integrations
-- ... and 1 more tool from the Tools Library
+- ✅ **D&B Hoovers - Company Intelligence** - Firmographics, account intelligence, and ICP fit signals
+- ✅ **Agile CRM - Contact and Pipeline Manager** - Contact lifecycle management with deal stage progression
+- ✅ **LeadsBridge - Lead Sync Integrations** - Real-time ad-to-CRM lead routing and mapping workflows
+- ✅ **Dealfront - Intent Intelligence** - Buying intent watchlists and account prioritization
+- ✅ **Sumo - List Building and Popups** - Triggered list capture campaigns with submission tracking
 
 ### 5. Shared Persistence + Unified Tool Analytics
 - Tool states are now stored in the database-backed JSON store via `/api/tools/state/[toolId]`.
 - Tool events are tracked via `/api/tools/analytics` for usage/performance analysis.
-- A unified dashboard at `/dashboard/tools-features/analytics` compares activity across all implemented tools.
-- Previously client-only tools now persist data across refreshes/restarts (SalesWings, Mailchimp, OptinMonster, Demio, Intercom, CallPage, Leadfeeder, RollWorks, Pipedrive, HubSpot, Zendesk, Overloop, Extole).
+- A unified dashboard at `/dashboard/tools/analytics` compares activity across all implemented tools.
+- Tools Library detail pages now support direct in-app execution via custom endpoint `/api/tools/[id]/run`.
+- All 23 Tools Library tools now publish the same normalized app-owned run contract: capability profile, input schema, record list, metrics, actions, and crawl-backed source evidence.
+- Previously client-only tools now persist data across refreshes/restarts (SalesWings, Mailchimp, OptinMonster, Demio, Intercom, CallPage, Leadfeeder, RollWorks, Pipedrive, HubSpot, Zendesk, Overloop, Extole, D&B Hoovers, Agile CRM, LeadsBridge, Dealfront, Sumo).
 
 ---
 

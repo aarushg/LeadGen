@@ -4,8 +4,8 @@
 
 ### 1. Tools Library Dashboard
 - **URL**: `/dashboard/tools`
-- **Features**: 
-  - View all 23 tools
+- **Features**:
+  - View all 23 Tools Library tools
   - Search by name, type, or feature
   - Filter by tool category
   - Compare multiple tools side-by-side
@@ -23,14 +23,23 @@
   - Success metrics
   - Links to official documentation
 
-### 3. Tools API
+### 3. Unified Tools Library Surface
+- **Primary URL**: `/dashboard/tools`
+- **Analytics URL**: `/dashboard/tools/analytics`
+- **Features**:
+  - Single tools surface in UI (Tools Library)
+  - Full Tools Library coverage (23/23)
+  - Plus one bonus in-app tool: Apollo.io
+  - Legacy `/dashboard/tools-features` routes redirect to Tools Library
+
+### 4. Tools API
 - **Endpoint**: `GET /api/tools`
-- **Response**: Array of all 23 tools with basic information
+- **Response**: Array of all 23 Tools Library tools with basic information
 
 - **Endpoint**: `GET /api/tools/[id]/implementation`
 - **Response**: Detailed implementation guide for specific tool
 
-## Tool Categories
+## Tool Categories (Tools Library)
 
 ### Marketing Automation (4 tools)
 - Salesforce Marketing Cloud
@@ -65,6 +74,9 @@
 - RollWorks
 - Extole
 
+### Bonus In-App Tool (not part of Tools Library)
+- Apollo.io
+
 ## Common Use Cases by Tool Type
 
 ### I want to...
@@ -82,7 +94,7 @@
 → Pipedrive, Zendesk Sell, Agile CRM
 
 **Score and prioritize leads**
-→ SalesWings, Leafeeder, Dealfront
+→ SalesWings, Leadfeeder, Dealfront
 
 **Host webinars for lead gen**
 → Demio
@@ -99,75 +111,10 @@
 **Pop-ups and list building**
 → OptinMonster, Sumo
 
-## Pricing Tiers Overview
-
-### Free/Freemium
-- Hunter (free tier)
-- OptinMonster (free tier)
-- Mailchimp (free tier)
-- Sumo (free tier)
-- HubSpot Marketing Hub (free tier)
-
-### Budget-Friendly (<$300/month)
-- Mailchimp ($8-$350/month)
-- UpLead ($1-3/lead)
-- OptinMonster ($8/month)
-- Agile CRM ($9.99/month)
-- Pipedrive ($14/month)
-- Zendesk Sell ($15/month)
-- Leadfeeder ($63/month)
-- CallPage ($49/month)
-- AeroLeads ($149/month)
-- LeadFuze ($299/month)
-- OptinMonster ($99-$300/month)
-
-### Mid-Range ($300-$1,500/month)
-- Hunter ($99/month)
-- Demio ($99/month)
-- Overloop ($99+/user/month)
-- LeadsBridge ($97/month)
-- SalesWings ($299/month)
-- RollWorks ($2,000+/month)
-
-### Enterprise
-- Salesforce Marketing Cloud ($1,500+/month)
-- D&B Hoovers ($5,000+/year)
-- Extole ($25,000+/year)
-
-## Implementation Time
-
-### Quick Setup (< 1 hour)
-- Hunter
-- OptinMonster
-- Mailchimp
-- Agile CRM
-- AeroLeads
-- Intercom
-- Leadfeeder
-- Sumo
-
-### Medium Setup (1-3 hours)
-- UpLead
-- Demio
-- Overloop
-- Pipedrive
-- Zendesk Sell
-- Callpage
-- LeadsBridge
-- HubSpot Marketing Hub
-
-### Complex Setup (3+ hours)
-- Salesforce Marketing Cloud (2-3 weeks)
-- D&B Hoovers (2-4 weeks)
-- RollWorks (2-3 weeks)
-- LeadFuze (2 hours)
-- SalesWings (2-3 days)
-- Dealfront (2-3 hours)
-
 ## API Integration Support
 
 ### Full API Support
-All 23 tools support API integration or Zapier integration for custom workflows
+All 23 Tools Library tools support API integration or Zapier integration for custom workflows.
 
 ### Direct API
 - Salesforce Marketing Cloud
@@ -223,5 +170,9 @@ All 23 tools support API integration or Zapier integration for custom workflows
 ## Contact & Support
 
 For questions about specific tools, visit their official documentation links available on each tool's detailed page in the app.
+
+Coverage summary:
+- Tools Library: 23/23 implemented
+- In-app AI tool experiences: 24 total (23 Tools Library + Apollo.io bonus)
 
 For LeadGen app questions, check the main README.md

@@ -106,6 +106,11 @@ export default function LeadToolsPage() {
         <h1 className="text-2xl font-bold">Lead Generation Tools Library</h1>
         <p className="text-muted-foreground mt-1">{leadGenerationIntro.overview}</p>
         <p className="text-sm text-muted-foreground mt-2">{leadGenerationIntro.description}</p>
+        <div className="mt-3">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/dashboard/tools/analytics">Open Tool Analytics</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

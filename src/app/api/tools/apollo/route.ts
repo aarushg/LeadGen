@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic()
+import { randomUUID } from 'crypto'
+import { runToolByName } from '@/lib/tool-runner'
+import { getToolProfile } from '@/lib/tool-profiles'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,52 +14,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const prompt = `Generate a list of 8-12 realistic B2B leads for company "${company || 'any'}" matching "${searchTerm || 'sales professionals'}". Include realistic details and verified email addresses.
-
-For each lead, provide JSON with:
-- firstName, lastName
-- email (realistic format)
-- title, company, industry, seniority
-- linkedinURL (optional)
-- phoneNumber (optional)
-- verified (boolean)
-- quality ('verified' | 'likely' | 'potential')
-
-Return as JSON array.`
-
-    const message = await client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-    })
-
-    const responseText =
-      message.content[0].type === 'text' ? message.content[0].text : ''
-
-    // Extract JSON from response
-    const jsonMatch = responseText.match(/\[[\s\S]*\]/)
-    const results = jsonMatch ? JSON.parse(jsonMatch[0]) : []
+    const execution = await runToolByName('Apollo.io', { company, searchTerm, maxResults: 12 })
+    const results = (execution.output.records as Array<Record<string, unknown>>) ?? []
+    const legacyLeads = (execution.output.leads as Array<Record<string, unknown>>) ?? []
+    const discovery = execution.output.discovery ?? null
 
     return NextResponse.json({
-      leads: results.map((r: any) => ({
-        id: `apollo-${Math.random().toString(36).substr(2, 9)}`,
-        firstName: r.firstName || 'John',
-        lastName: r.lastName || 'Doe',
-        email: r.email || 'contact@company.com',
-        company: r.company || company || 'Acme Corp',
-        title: r.title || 'Sales Manager',
-        industry: r.industry || 'Technology',
-        seniority: r.seniority || 'manager',
+      profile: getToolProfile('Apollo.io'),
+      result: execution.output,
+      records: results,
+      leads: legacyLeads.map((r: any) => ({
+        id: randomUUID(),
+        firstName: r.firstName || '',
+        lastName: r.lastName || '',
+        email: r.email || '',
+        company: r.company || company || '',
+        title: r.title || '',
+        industry: r.industry || '',
+        seniority: r.seniority || '',
         linkedinURL: r.linkedinURL,
         phoneNumber: r.phoneNumber,
-        verified: r.verified || true,
-        quality: r.quality || 'verified',
+        verified: Boolean(r.verified),
+        quality: r.quality || 'potential',
       })),
+      discovery,
     })
   } catch (error) {
     console.error('Apollo search failed:', error)

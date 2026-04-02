@@ -347,5 +347,1322 @@
       "created_at": "2026-03-31T01:08:31.725Z",
       "updated_at": "2026-03-31T01:08:31.725Z"
     }
+  ],
+  "tool_states": [
+    {
+      "tool_id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "state": {
+        "runs": [
+          {
+            "id": "f341ef9b-1eaa-4d7f-8fbd-771f5f9a72d6",
+            "createdAt": "2026-04-01T22:40:25.391Z",
+            "input": {},
+            "output": {
+              "leads": [
+                {
+                  "id": "1-duckduckgo.com",
+                  "firstName": "Google",
+                  "lastName": "Accounts",
+                  "contactName": "Google Accounts",
+                  "email": "",
+                  "company": "Google Accounts",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                },
+                {
+                  "id": "2-duckduckgo.com",
+                  "firstName": "Constant",
+                  "lastName": "Contact",
+                  "contactName": "Constant Contact",
+                  "email": "",
+                  "company": "duckduckgo",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                },
+                {
+                  "id": "4-duckduckgo.com",
+                  "firstName": "Cambridge",
+                  "lastName": "Dictionary",
+                  "contactName": "Cambridge Dictionary",
+                  "email": "",
+                  "company": "English meaning",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                },
+                {
+                  "id": "5-duckduckgo.com",
+                  "firstName": "Contact",
+                  "lastName": "Us",
+                  "contactName": "Contact Us",
+                  "email": "",
+                  "company": "Oakmont Borough",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                },
+                {
+                  "id": "7-duckduckgo.com",
+                  "firstName": "The",
+                  "lastName": "Free",
+                  "contactName": "The Free",
+                  "email": "",
+                  "company": "definition of contact by The Free Dictionary",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                },
+                {
+                  "id": "8-duckduckgo.com",
+                  "firstName": "Contact",
+                  "lastName": "Information",
+                  "contactName": "Contact Information",
+                  "email": "",
+                  "company": "Riverview High School",
+                  "title": "",
+                  "industry": "",
+                  "seniority": "",
+                  "companySize": "",
+                  "location": "",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+                }
+              ],
+              "sources": [
+                {
+                  "title": "Sign in - Google Accounts",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                },
+                {
+                  "title": "Constant Contact : Login",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                },
+                {
+                  "title": "CONTACT Definition &amp; Meaning - Merriam-Webster",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.merriam%2Dwebster.com%2Fdictionary%2Fcontact&amp;rut=71e5ac2d79dfd63352931a573c25666fdd7fc2c062b5d2967fc59cb0c3f5f9d8"
+                },
+                {
+                  "title": "CONTACT | English meaning - Cambridge Dictionary",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                },
+                {
+                  "title": "Contact Us - Oakmont Borough",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                },
+                {
+                  "title": "CONTACT Definition &amp; Meaning | Dictionary.com",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.dictionary.com%2Fbrowse%2Fcontact&amp;rut=344ae1b33d2fbfcb1ad1433f0c3c8ac6ca9adbaf1781d3b07c8f779344d7282c"
+                },
+                {
+                  "title": "Contact - definition of contact by The Free Dictionary",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                },
+                {
+                  "title": "Contact Information - Riverview High School",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+                }
+              ],
+              "discovery": {
+                "mode": "public-web-discovery",
+                "query": {
+                  "tool": "lead-search",
+                  "company": "",
+                  "role": "",
+                  "industry": "",
+                  "location": ""
+                },
+                "totalFound": 6,
+                "items": [
+                  {
+                    "id": "1-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "Google Accounts",
+                    "company": "Google Accounts",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                  },
+                  {
+                    "id": "2-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "Constant Contact",
+                    "company": "duckduckgo",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                  },
+                  {
+                    "id": "4-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "Cambridge Dictionary",
+                    "company": "English meaning",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                  },
+                  {
+                    "id": "5-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "Contact Us",
+                    "company": "Oakmont Borough",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                  },
+                  {
+                    "id": "7-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "The Free",
+                    "company": "definition of contact by The Free Dictionary",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                  },
+                  {
+                    "id": "8-duckduckgo.com",
+                    "kind": "lead",
+                    "label": "Contact Information",
+                    "company": "Riverview High School",
+                    "email": "",
+                    "title": "",
+                    "location": "",
+                    "confidence": 80,
+                    "verified": false,
+                    "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+                  }
+                ],
+                "sources": [
+                  {
+                    "title": "Sign in - Google Accounts",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                  },
+                  {
+                    "title": "Constant Contact : Login",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                  },
+                  {
+                    "title": "CONTACT Definition &amp; Meaning - Merriam-Webster",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.merriam%2Dwebster.com%2Fdictionary%2Fcontact&amp;rut=71e5ac2d79dfd63352931a573c25666fdd7fc2c062b5d2967fc59cb0c3f5f9d8"
+                  },
+                  {
+                    "title": "CONTACT | English meaning - Cambridge Dictionary",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                  },
+                  {
+                    "title": "Contact Us - Oakmont Borough",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                  },
+                  {
+                    "title": "CONTACT Definition &amp; Meaning | Dictionary.com",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.dictionary.com%2Fbrowse%2Fcontact&amp;rut=344ae1b33d2fbfcb1ad1433f0c3c8ac6ca9adbaf1781d3b07c8f779344d7282c"
+                  },
+                  {
+                    "title": "Contact - definition of contact by The Free Dictionary",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                  },
+                  {
+                    "title": "Contact Information - Riverview High School",
+                    "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+                  }
+                ]
+              },
+              "totalFound": 6,
+              "resultVersion": "tools-library-v1",
+              "tool": "AeroLeads",
+              "capability": "contact-discovery",
+              "mode": "public-web-discovery",
+              "researchBasis": "email and phone discovery, lead enrichment, CRM sync",
+              "modes": [
+                "contact-search",
+                "company-contact-discovery"
+              ],
+              "inputSchema": [
+                {
+                  "key": "company",
+                  "label": "Company",
+                  "required": true,
+                  "example": "Acme"
+                },
+                {
+                  "key": "title",
+                  "label": "Title",
+                  "required": true,
+                  "example": "Marketing Director"
+                },
+                {
+                  "key": "seniority",
+                  "label": "Seniority",
+                  "required": false,
+                  "example": "Director"
+                }
+              ],
+              "outputSchema": {
+                "recordType": "contact",
+                "primaryCollections": [
+                  "records",
+                  "sources",
+                  "metrics",
+                  "actions"
+                ]
+              },
+              "query": {
+                "tool": "AeroLeads"
+              },
+              "records": [
+                {
+                  "id": "1-duckduckgo.com",
+                  "type": "contact",
+                  "name": "Google Accounts",
+                  "company": "Google Accounts",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                },
+                {
+                  "id": "2-duckduckgo.com",
+                  "type": "contact",
+                  "name": "Constant Contact",
+                  "company": "duckduckgo",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                },
+                {
+                  "id": "4-duckduckgo.com",
+                  "type": "contact",
+                  "name": "Cambridge Dictionary",
+                  "company": "English meaning",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                },
+                {
+                  "id": "5-duckduckgo.com",
+                  "type": "contact",
+                  "name": "Contact Us",
+                  "company": "Oakmont Borough",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                },
+                {
+                  "id": "7-duckduckgo.com",
+                  "type": "contact",
+                  "name": "The Free",
+                  "company": "definition of contact by The Free Dictionary",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                },
+                {
+                  "id": "8-duckduckgo.com",
+                  "type": "contact",
+                  "name": "Contact Information",
+                  "company": "Riverview High School",
+                  "email": "",
+                  "title": "",
+                  "location": "",
+                  "confidence": 80,
+                  "verified": false,
+                  "status": "potential",
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+                }
+              ],
+              "metrics": [
+                {
+                  "key": "recordsFound",
+                  "label": "Records Found",
+                  "value": 6
+                },
+                {
+                  "key": "sourcesReviewed",
+                  "label": "Sources Reviewed",
+                  "value": 8
+                },
+                {
+                  "key": "inputsMatched",
+                  "label": "Inputs Matched",
+                  "value": "0/3"
+                }
+              ],
+              "actions": [
+                {
+                  "type": "contact-search",
+                  "label": "Review highest-confidence contacts",
+                  "status": "ready"
+                },
+                {
+                  "type": "company-contact-discovery",
+                  "label": "Validate best-fit outreach targets",
+                  "status": "ready"
+                },
+                {
+                  "type": "contact-search",
+                  "label": "Export source-backed contacts",
+                  "status": "ready"
+                }
+              ],
+              "summary": "AeroLeads contact discovery found 6 source-backed matches"
+            }
+          },
+          {
+            "id": "0427c047-15a7-4c34-b06d-9219aacedbe8",
+            "createdAt": "2026-04-01T21:46:08.013Z",
+            "input": {},
+            "output": {
+              "leads": [
+                {
+                  "id": "1-duckduckgo.com",
+                  "firstName": "Google",
+                  "lastName": "Accounts",
+                  "contactName": "Google Accounts",
+                  "email": "",
+                  "company": "Google Accounts",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                },
+                {
+                  "id": "2-duckduckgo.com",
+                  "firstName": "Google",
+                  "lastName": "Contacts",
+                  "contactName": "Google Contacts",
+                  "email": "",
+                  "company": "duckduckgo",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2Fu%2F0%2F&amp;rut=154d3b90c32b68452c1d4816400427716a47c376d74acd04aa7cdb8ee13096cb"
+                },
+                {
+                  "id": "3-duckduckgo.com",
+                  "firstName": "Constant",
+                  "lastName": "Contact",
+                  "contactName": "Constant Contact",
+                  "email": "",
+                  "company": "duckduckgo",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                },
+                {
+                  "id": "5-duckduckgo.com",
+                  "firstName": "Cambridge",
+                  "lastName": "Dictionary",
+                  "contactName": "Cambridge Dictionary",
+                  "email": "",
+                  "company": "English meaning",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                },
+                {
+                  "id": "6-duckduckgo.com",
+                  "firstName": "Contact",
+                  "lastName": "Us",
+                  "contactName": "Contact Us",
+                  "email": "",
+                  "company": "Oakmont Borough",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                },
+                {
+                  "id": "8-duckduckgo.com",
+                  "firstName": "The",
+                  "lastName": "Free",
+                  "contactName": "The Free",
+                  "email": "",
+                  "company": "definition of contact by The Free Dictionary",
+                  "title": "Unknown",
+                  "industry": "Unknown",
+                  "seniority": "unknown",
+                  "companySize": "Unknown",
+                  "location": "Unknown",
+                  "phone": "",
+                  "phoneNumber": "",
+                  "buyingIntent": "medium",
+                  "engagementScore": 80,
+                  "dataQuality": "potential",
+                  "quality": "potential",
+                  "verified": false,
+                  "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                }
+              ],
+              "sources": [
+                {
+                  "title": "Sign in - Google Accounts",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+                },
+                {
+                  "title": "Google Contacts",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2Fu%2F0%2F&amp;rut=154d3b90c32b68452c1d4816400427716a47c376d74acd04aa7cdb8ee13096cb"
+                },
+                {
+                  "title": "Constant Contact : Login",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+                },
+                {
+                  "title": "CONTACT Definition &amp; Meaning - Merriam-Webster",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.merriam%2Dwebster.com%2Fdictionary%2Fcontact&amp;rut=71e5ac2d79dfd63352931a573c25666fdd7fc2c062b5d2967fc59cb0c3f5f9d8"
+                },
+                {
+                  "title": "CONTACT | English meaning - Cambridge Dictionary",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+                },
+                {
+                  "title": "Contact Us - Oakmont Borough",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+                },
+                {
+                  "title": "CONTACT Definition &amp; Meaning | Dictionary.com",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.dictionary.com%2Fbrowse%2Fcontact&amp;rut=344ae1b33d2fbfcb1ad1433f0c3c8ac6ca9adbaf1781d3b07c8f779344d7282c"
+                },
+                {
+                  "title": "Contact - definition of contact by The Free Dictionary",
+                  "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+                }
+              ]
+            }
+          },
+          {
+            "id": "8a1baa3f-09db-444c-b6c6-6e1dcad96949",
+            "createdAt": "2026-04-01T21:35:19.901Z",
+            "input": {},
+            "output": {
+              "leads": [],
+              "sources": []
+            }
+          },
+          {
+            "id": "17e33567-cdd4-43a9-8382-95cfe0c1b13e",
+            "createdAt": "2026-04-01T20:58:55.709Z",
+            "input": {},
+            "output": {
+              "leads": [
+                {
+                  "id": "northstar-labs-1",
+                  "firstName": "Alex",
+                  "lastName": "Stone",
+                  "contactName": "Alex Stone",
+                  "email": "alex.stone@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "executive",
+                  "companySize": "11-50",
+                  "location": "United States",
+                  "phone": "+1-555-0100",
+                  "phoneNumber": "+1-555-0100",
+                  "linkedinUrl": "https://www.linkedin.com/in/alex-stone",
+                  "linkedinURL": "https://www.linkedin.com/in/alex-stone",
+                  "buyingIntent": "high",
+                  "engagementScore": 93,
+                  "dataQuality": "verified",
+                  "quality": "verified",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 79
+                },
+                {
+                  "id": "northstar-labs-2",
+                  "firstName": "Jordan",
+                  "lastName": "Parker",
+                  "contactName": "Jordan Parker",
+                  "email": "jordan.parker@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "manager",
+                  "companySize": "51-200",
+                  "location": "United States",
+                  "phone": "+1-555-0101",
+                  "phoneNumber": "+1-555-0101",
+                  "linkedinUrl": "https://www.linkedin.com/in/jordan-parker",
+                  "linkedinURL": "https://www.linkedin.com/in/jordan-parker",
+                  "buyingIntent": "medium",
+                  "engagementScore": 94,
+                  "dataQuality": "likely",
+                  "quality": "likely",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 80
+                },
+                {
+                  "id": "northstar-labs-3",
+                  "firstName": "Taylor",
+                  "lastName": "Hayes",
+                  "contactName": "Taylor Hayes",
+                  "email": "taylor.hayes@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "individual",
+                  "companySize": "201-500",
+                  "location": "United States",
+                  "phone": "+1-555-0102",
+                  "phoneNumber": "+1-555-0102",
+                  "linkedinUrl": "https://www.linkedin.com/in/taylor-hayes",
+                  "linkedinURL": "https://www.linkedin.com/in/taylor-hayes",
+                  "buyingIntent": "high",
+                  "engagementScore": 95,
+                  "dataQuality": "verified",
+                  "quality": "verified",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 81
+                },
+                {
+                  "id": "northstar-labs-4",
+                  "firstName": "Morgan",
+                  "lastName": "Blake",
+                  "contactName": "Morgan Blake",
+                  "email": "morgan.blake@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "executive",
+                  "companySize": "11-50",
+                  "location": "United States",
+                  "phone": "+1-555-0103",
+                  "phoneNumber": "+1-555-0103",
+                  "linkedinUrl": "https://www.linkedin.com/in/morgan-blake",
+                  "linkedinURL": "https://www.linkedin.com/in/morgan-blake",
+                  "buyingIntent": "medium",
+                  "engagementScore": 96,
+                  "dataQuality": "likely",
+                  "quality": "likely",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 82
+                },
+                {
+                  "id": "northstar-labs-5",
+                  "firstName": "Riley",
+                  "lastName": "Quinn",
+                  "contactName": "Riley Quinn",
+                  "email": "riley.quinn@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "manager",
+                  "companySize": "51-200",
+                  "location": "United States",
+                  "phone": "+1-555-0104",
+                  "phoneNumber": "+1-555-0104",
+                  "linkedinUrl": "https://www.linkedin.com/in/riley-quinn",
+                  "linkedinURL": "https://www.linkedin.com/in/riley-quinn",
+                  "buyingIntent": "high",
+                  "engagementScore": 62,
+                  "dataQuality": "verified",
+                  "quality": "verified",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 83
+                },
+                {
+                  "id": "northstar-labs-6",
+                  "firstName": "Casey",
+                  "lastName": "Cole",
+                  "contactName": "Casey Cole",
+                  "email": "casey.cole@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "individual",
+                  "companySize": "201-500",
+                  "location": "United States",
+                  "phone": "+1-555-0105",
+                  "phoneNumber": "+1-555-0105",
+                  "linkedinUrl": "https://www.linkedin.com/in/casey-cole",
+                  "linkedinURL": "https://www.linkedin.com/in/casey-cole",
+                  "buyingIntent": "medium",
+                  "engagementScore": 63,
+                  "dataQuality": "likely",
+                  "quality": "likely",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 84
+                },
+                {
+                  "id": "northstar-labs-7",
+                  "firstName": "Alex",
+                  "lastName": "Stone",
+                  "contactName": "Alex Stone",
+                  "email": "alex.stone@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "executive",
+                  "companySize": "11-50",
+                  "location": "United States",
+                  "phone": "+1-555-0106",
+                  "phoneNumber": "+1-555-0106",
+                  "linkedinUrl": "https://www.linkedin.com/in/alex-stone",
+                  "linkedinURL": "https://www.linkedin.com/in/alex-stone",
+                  "buyingIntent": "high",
+                  "engagementScore": 64,
+                  "dataQuality": "verified",
+                  "quality": "verified",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 85
+                },
+                {
+                  "id": "northstar-labs-8",
+                  "firstName": "Jordan",
+                  "lastName": "Parker",
+                  "contactName": "Jordan Parker",
+                  "email": "jordan.parker@northstar-labs.com",
+                  "company": "Northstar Labs",
+                  "title": "Sales Manager",
+                  "industry": "Technology",
+                  "seniority": "manager",
+                  "companySize": "51-200",
+                  "location": "United States",
+                  "phone": "+1-555-0107",
+                  "phoneNumber": "+1-555-0107",
+                  "linkedinUrl": "https://www.linkedin.com/in/jordan-parker",
+                  "linkedinURL": "https://www.linkedin.com/in/jordan-parker",
+                  "buyingIntent": "medium",
+                  "engagementScore": 65,
+                  "dataQuality": "likely",
+                  "quality": "likely",
+                  "verified": true,
+                  "source": "Internal lead model",
+                  "confidence": 86
+                }
+              ]
+            }
+          }
+        ],
+        "lastResult": {
+          "leads": [
+            {
+              "id": "1-duckduckgo.com",
+              "firstName": "Google",
+              "lastName": "Accounts",
+              "contactName": "Google Accounts",
+              "email": "",
+              "company": "Google Accounts",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+            },
+            {
+              "id": "2-duckduckgo.com",
+              "firstName": "Constant",
+              "lastName": "Contact",
+              "contactName": "Constant Contact",
+              "email": "",
+              "company": "duckduckgo",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+            },
+            {
+              "id": "4-duckduckgo.com",
+              "firstName": "Cambridge",
+              "lastName": "Dictionary",
+              "contactName": "Cambridge Dictionary",
+              "email": "",
+              "company": "English meaning",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+            },
+            {
+              "id": "5-duckduckgo.com",
+              "firstName": "Contact",
+              "lastName": "Us",
+              "contactName": "Contact Us",
+              "email": "",
+              "company": "Oakmont Borough",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+            },
+            {
+              "id": "7-duckduckgo.com",
+              "firstName": "The",
+              "lastName": "Free",
+              "contactName": "The Free",
+              "email": "",
+              "company": "definition of contact by The Free Dictionary",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+            },
+            {
+              "id": "8-duckduckgo.com",
+              "firstName": "Contact",
+              "lastName": "Information",
+              "contactName": "Contact Information",
+              "email": "",
+              "company": "Riverview High School",
+              "title": "",
+              "industry": "",
+              "seniority": "",
+              "companySize": "",
+              "location": "",
+              "phone": "",
+              "phoneNumber": "",
+              "buyingIntent": "medium",
+              "engagementScore": 80,
+              "dataQuality": "potential",
+              "quality": "potential",
+              "verified": false,
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+            }
+          ],
+          "sources": [
+            {
+              "title": "Sign in - Google Accounts",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+            },
+            {
+              "title": "Constant Contact : Login",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+            },
+            {
+              "title": "CONTACT Definition &amp; Meaning - Merriam-Webster",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.merriam%2Dwebster.com%2Fdictionary%2Fcontact&amp;rut=71e5ac2d79dfd63352931a573c25666fdd7fc2c062b5d2967fc59cb0c3f5f9d8"
+            },
+            {
+              "title": "CONTACT | English meaning - Cambridge Dictionary",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+            },
+            {
+              "title": "Contact Us - Oakmont Borough",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+            },
+            {
+              "title": "CONTACT Definition &amp; Meaning | Dictionary.com",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.dictionary.com%2Fbrowse%2Fcontact&amp;rut=344ae1b33d2fbfcb1ad1433f0c3c8ac6ca9adbaf1781d3b07c8f779344d7282c"
+            },
+            {
+              "title": "Contact - definition of contact by The Free Dictionary",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+            },
+            {
+              "title": "Contact Information - Riverview High School",
+              "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+            }
+          ],
+          "discovery": {
+            "mode": "public-web-discovery",
+            "query": {
+              "tool": "lead-search",
+              "company": "",
+              "role": "",
+              "industry": "",
+              "location": ""
+            },
+            "totalFound": 6,
+            "items": [
+              {
+                "id": "1-duckduckgo.com",
+                "kind": "lead",
+                "label": "Google Accounts",
+                "company": "Google Accounts",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+              },
+              {
+                "id": "2-duckduckgo.com",
+                "kind": "lead",
+                "label": "Constant Contact",
+                "company": "duckduckgo",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+              },
+              {
+                "id": "4-duckduckgo.com",
+                "kind": "lead",
+                "label": "Cambridge Dictionary",
+                "company": "English meaning",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+              },
+              {
+                "id": "5-duckduckgo.com",
+                "kind": "lead",
+                "label": "Contact Us",
+                "company": "Oakmont Borough",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+              },
+              {
+                "id": "7-duckduckgo.com",
+                "kind": "lead",
+                "label": "The Free",
+                "company": "definition of contact by The Free Dictionary",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+              },
+              {
+                "id": "8-duckduckgo.com",
+                "kind": "lead",
+                "label": "Contact Information",
+                "company": "Riverview High School",
+                "email": "",
+                "title": "",
+                "location": "",
+                "confidence": 80,
+                "verified": false,
+                "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+              }
+            ],
+            "sources": [
+              {
+                "title": "Sign in - Google Accounts",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+              },
+              {
+                "title": "Constant Contact : Login",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+              },
+              {
+                "title": "CONTACT Definition &amp; Meaning - Merriam-Webster",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.merriam%2Dwebster.com%2Fdictionary%2Fcontact&amp;rut=71e5ac2d79dfd63352931a573c25666fdd7fc2c062b5d2967fc59cb0c3f5f9d8"
+              },
+              {
+                "title": "CONTACT | English meaning - Cambridge Dictionary",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+              },
+              {
+                "title": "Contact Us - Oakmont Borough",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+              },
+              {
+                "title": "CONTACT Definition &amp; Meaning | Dictionary.com",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.dictionary.com%2Fbrowse%2Fcontact&amp;rut=344ae1b33d2fbfcb1ad1433f0c3c8ac6ca9adbaf1781d3b07c8f779344d7282c"
+              },
+              {
+                "title": "Contact - definition of contact by The Free Dictionary",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+              },
+              {
+                "title": "Contact Information - Riverview High School",
+                "url": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+              }
+            ]
+          },
+          "totalFound": 6,
+          "resultVersion": "tools-library-v1",
+          "tool": "AeroLeads",
+          "capability": "contact-discovery",
+          "mode": "public-web-discovery",
+          "researchBasis": "email and phone discovery, lead enrichment, CRM sync",
+          "modes": [
+            "contact-search",
+            "company-contact-discovery"
+          ],
+          "inputSchema": [
+            {
+              "key": "company",
+              "label": "Company",
+              "required": true,
+              "example": "Acme"
+            },
+            {
+              "key": "title",
+              "label": "Title",
+              "required": true,
+              "example": "Marketing Director"
+            },
+            {
+              "key": "seniority",
+              "label": "Seniority",
+              "required": false,
+              "example": "Director"
+            }
+          ],
+          "outputSchema": {
+            "recordType": "contact",
+            "primaryCollections": [
+              "records",
+              "sources",
+              "metrics",
+              "actions"
+            ]
+          },
+          "query": {
+            "tool": "AeroLeads"
+          },
+          "records": [
+            {
+              "id": "1-duckduckgo.com",
+              "type": "contact",
+              "name": "Google Accounts",
+              "company": "Google Accounts",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fcontacts.google.com%2F&amp;rut=442eecbd2c6b743bd388db9a52b0361e5aa046b24aff99d5136c540619c4037f"
+            },
+            {
+              "id": "2-duckduckgo.com",
+              "type": "contact",
+              "name": "Constant Contact",
+              "company": "duckduckgo",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Flogin.constantcontact.com%2Flogin%2Flogin.sdo&amp;rut=5a9b3b9965b3210b988db9f1f417b503dfd5f4a473f1d0337d21d60c2998fe34"
+            },
+            {
+              "id": "4-duckduckgo.com",
+              "type": "contact",
+              "name": "Cambridge Dictionary",
+              "company": "English meaning",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fdictionary.cambridge.org%2Fdictionary%2Fenglish%2Fcontact&amp;rut=02d2a57f42cbe21239d50098f9f218b7ab116409d07597d24fd9cdd16cb1770b"
+            },
+            {
+              "id": "5-duckduckgo.com",
+              "type": "contact",
+              "name": "Contact Us",
+              "company": "Oakmont Borough",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Foakmontborough.com%2Fcontact%2Dus%2F&amp;rut=93992ee73003a7b54774b3e06a1835d796bd0e5b28d0cf0c8fe73f471740c0a4"
+            },
+            {
+              "id": "7-duckduckgo.com",
+              "type": "contact",
+              "name": "The Free",
+              "company": "definition of contact by The Free Dictionary",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.thefreedictionary.com%2Fcontact&amp;rut=fc266d4d2523eb8d731866410c194de5705606c0ac77e9ce63cf6b518e866103"
+            },
+            {
+              "id": "8-duckduckgo.com",
+              "type": "contact",
+              "name": "Contact Information",
+              "company": "Riverview High School",
+              "email": "",
+              "title": "",
+              "location": "",
+              "confidence": 80,
+              "verified": false,
+              "status": "potential",
+              "source": "https://duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.rsd.k12.pa.us%2FContactInformation.aspx&amp;rut=f908beb2fa3012e95bfb533ab613d424807afad1bd7b8553dc530eeb0662dbe3"
+            }
+          ],
+          "metrics": [
+            {
+              "key": "recordsFound",
+              "label": "Records Found",
+              "value": 6
+            },
+            {
+              "key": "sourcesReviewed",
+              "label": "Sources Reviewed",
+              "value": 8
+            },
+            {
+              "key": "inputsMatched",
+              "label": "Inputs Matched",
+              "value": "0/3"
+            }
+          ],
+          "actions": [
+            {
+              "type": "contact-search",
+              "label": "Review highest-confidence contacts",
+              "status": "ready"
+            },
+            {
+              "type": "company-contact-discovery",
+              "label": "Validate best-fit outreach targets",
+              "status": "ready"
+            },
+            {
+              "type": "contact-search",
+              "label": "Export source-backed contacts",
+              "status": "ready"
+            }
+          ],
+          "summary": "AeroLeads contact discovery found 6 source-backed matches"
+        },
+        "lastExecutedAt": "2026-04-01T22:40:25.391Z"
+      },
+      "updated_at": "2026-04-01T22:40:25.394Z"
+    }
+  ],
+  "tool_events": [
+    {
+      "id": "6dc6c80a-52ab-4cbd-a3cc-07d9e6410402",
+      "tool_id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "event_type": "tool_executed",
+      "metadata": {
+        "runId": "17e33567-cdd4-43a9-8382-95cfe0c1b13e",
+        "source": "tools-library"
+      },
+      "created_at": "2026-04-01T20:58:55.714Z"
+    },
+    {
+      "id": "a3024ff4-880a-42b1-bb66-6d0c54bba534",
+      "tool_id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "event_type": "tool_executed",
+      "metadata": {
+        "runId": "8a1baa3f-09db-444c-b6c6-6e1dcad96949",
+        "source": "tools-library"
+      },
+      "created_at": "2026-04-01T21:35:19.913Z"
+    },
+    {
+      "id": "c55a5c80-bdda-4296-af62-793eb95d7aa9",
+      "tool_id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "event_type": "tool_executed",
+      "metadata": {
+        "runId": "0427c047-15a7-4c34-b06d-9219aacedbe8",
+        "source": "tools-library"
+      },
+      "created_at": "2026-04-01T21:46:08.018Z"
+    },
+    {
+      "id": "ed0115c0-5dc2-4272-aca0-fd87f7c87f79",
+      "tool_id": "9a0d01a8-4a48-4db1-b4ac-66e2a27fcdd7",
+      "event_type": "tool_executed",
+      "metadata": {
+        "runId": "f341ef9b-1eaa-4d7f-8fbd-771f5f9a72d6",
+        "source": "tools-library"
+      },
+      "created_at": "2026-04-01T22:40:25.401Z"
+    }
   ]
 }
