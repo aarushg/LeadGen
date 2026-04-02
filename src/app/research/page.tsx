@@ -29,6 +29,12 @@ export default function ResearchPage() {
     contactName: '',
     contactTitle: '',
     linkedinUrl: '',
+    leadSource: '',
+    acquisitionChannel: '',
+    campaignName: '',
+    adSetName: '',
+    leadQuality: 'medium',
+    estimatedRevenue: '',
     tone: 'professional',
     channel: 'email',
   })
@@ -72,15 +78,21 @@ export default function ResearchPage() {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          company: form.company,
-          company_website: form.website,
-          full_name: form.contactName,
-          title: form.contactTitle,
-          linkedin_url: form.linkedinUrl,
-          outreach_message: result.outreachMessage,
-          outreach_tone: form.tone,
-          outreach_channel: form.channel,
+          body: JSON.stringify({
+            company: form.company,
+            company_website: form.website,
+            full_name: form.contactName,
+            title: form.contactTitle,
+            linkedin_url: form.linkedinUrl,
+            lead_source: form.leadSource || undefined,
+            acquisition_channel: form.acquisitionChannel || undefined,
+            campaign_name: form.campaignName || undefined,
+            ad_set_name: form.adSetName || undefined,
+            lead_quality: form.leadQuality || undefined,
+            estimated_revenue: form.estimatedRevenue ? Number(form.estimatedRevenue) : undefined,
+            outreach_message: result.outreachMessage,
+            outreach_tone: form.tone,
+            outreach_channel: form.channel,
           research_data: result.brief,
           status: 'researched',
         }),
@@ -165,6 +177,73 @@ export default function ResearchPage() {
                     value={form.linkedinUrl}
                     onChange={e => set('linkedinUrl', e.target.value)}
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="leadSource">Lead Source</Label>
+                    <Input
+                      id="leadSource"
+                      placeholder="Google Ads"
+                      value={form.leadSource}
+                      onChange={e => set('leadSource', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="acquisitionChannel">Acquisition Channel</Label>
+                    <Input
+                      id="acquisitionChannel"
+                      placeholder="Paid Search"
+                      value={form.acquisitionChannel}
+                      onChange={e => set('acquisitionChannel', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="campaignName">Campaign Name</Label>
+                    <Input
+                      id="campaignName"
+                      placeholder="Spring Demand Gen"
+                      value={form.campaignName}
+                      onChange={e => set('campaignName', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="adSetName">Ad Set / Ad Group</Label>
+                    <Input
+                      id="adSetName"
+                      placeholder="CMO Lookalike"
+                      value={form.adSetName}
+                      onChange={e => set('adSetName', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label>Lead Quality</Label>
+                    <Select value={form.leadQuality} onValueChange={v => set('leadQuality', v)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="low">Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="estimatedRevenue">Estimated Revenue</Label>
+                    <Input
+                      id="estimatedRevenue"
+                      type="number"
+                      min="0"
+                      step="100"
+                      placeholder="5000"
+                      value={form.estimatedRevenue}
+                      onChange={e => set('estimatedRevenue', e.target.value)}
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">

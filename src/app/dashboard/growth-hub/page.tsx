@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { Lightbulb, Search, Sparkles, Target, TrendingUp } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -13,6 +14,7 @@ import {
   growthFeaturePriorityCounts,
   type GrowthFeatureCategory,
 } from '@/lib/growth-feature-ideas'
+import { getGrowthFeatureRoute, isGrowthFeatureImplemented } from '@/lib/growth-feature-links'
 
 const ALL_CATEGORIES = 'All categories'
 
@@ -58,7 +60,7 @@ export default function GrowthHubPage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl space-y-3">
             <Badge variant="secondary" className="w-fit">
-              100 agency-ready growth ideas
+              100 next-step growth ideas
             </Badge>
             <div>
               <h1 className="text-3xl font-bold tracking-tight">{growthFeatureIdeasIntro.title}</h1>
@@ -104,7 +106,7 @@ export default function GrowthHubPage() {
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-muted-foreground">
               <p>Use it as a roadmap for new service lines, client upsells, and internal product planning.</p>
-              <p>Search by outcome, browse by category, and start with high-priority features first.</p>
+              <p>Search by outcome, browse by category, and focus on the highest-priority ideas that are not built yet.</p>
             </CardContent>
           </Card>
         </div>
@@ -191,6 +193,11 @@ export default function GrowthHubPage() {
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Business outcome</p>
                 <p className="mt-1 text-sm">{feature.clientOutcome}</p>
               </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href={getGrowthFeatureRoute(feature)}>
+                  {isGrowthFeatureImplemented(feature) ? 'Open feature' : 'View brief'}
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         ))}

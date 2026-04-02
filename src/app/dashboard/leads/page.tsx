@@ -32,6 +32,12 @@ interface Lead {
   status: LeadStatus
   notes: string | null
   outreach_message: string | null
+  lead_source?: string | null
+  acquisition_channel?: string | null
+  campaign_name?: string | null
+  ad_set_name?: string | null
+  lead_quality?: 'high' | 'medium' | 'low' | null
+  estimated_revenue?: number | null
   created_at: string
 }
 
@@ -209,6 +215,19 @@ export default function LeadsPage() {
                 <div>
                   <p className="font-medium mb-1">Notes:</p>
                   <p className="text-muted-foreground">{selected.notes}</p>
+                </div>
+              )}
+              {(selected.lead_source || selected.acquisition_channel || selected.campaign_name || selected.ad_set_name) && (
+                <div className="space-y-2">
+                  <p className="font-medium">Campaign tracking</p>
+                  {selected.lead_source && <div><span className="font-medium">Lead source: </span>{selected.lead_source}</div>}
+                  {selected.acquisition_channel && <div><span className="font-medium">Channel: </span>{selected.acquisition_channel}</div>}
+                  {selected.campaign_name && <div><span className="font-medium">Campaign: </span>{selected.campaign_name}</div>}
+                  {selected.ad_set_name && <div><span className="font-medium">Ad set: </span>{selected.ad_set_name}</div>}
+                  {selected.lead_quality && <div><span className="font-medium">Lead quality: </span>{selected.lead_quality}</div>}
+                  {typeof selected.estimated_revenue === 'number' && (
+                    <div><span className="font-medium">Estimated revenue: </span>${selected.estimated_revenue.toLocaleString()}</div>
+                  )}
                 </div>
               )}
             </div>
