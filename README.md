@@ -86,6 +86,134 @@ Integrated lead generation and marketing tools built directly into the app. Acce
 
 ---
 
+## Feature Ideas To Help Agencies Grow Client Businesses
+
+Below is a practical feature backlog you can add to LeadGen to make it more valuable for marketing agencies focused on client growth, retention, and reporting.
+
+### Lead Capture & Qualification
+- Multi-step lead capture quiz with conditional logic
+- Exit-intent offers and popup campaign builder
+- Dynamic scheduling widget for booked calls and demos
+- Geo-targeted landing page personalization
+- Chat-based qualification flows for high-intent visitors
+- SMS opt-in capture for faster follow-up
+- Industry-specific intake form templates
+- Referral source and UTM auto-capture on every form
+- Lead magnet library for gated assets and offers
+- Form abandonment recovery workflows
+
+### Conversion Rate Optimization
+- Funnel drop-off analysis by step and page
+- Call-to-action testing workspace
+- Testimonial and proof asset manager
+- Mobile conversion audit checklist
+- Offer testing dashboard for pricing, guarantees, and hooks
+- Landing page to ad-message match scoring
+- Heatmap summary and click-pattern review
+- Checkout friction detector for ecommerce and service flows
+- Risk-reversal and guarantee section generator
+- Page speed opportunity scanner tied to conversion impact
+
+### CRM, Pipeline & Sales Enablement
+- Lead scoring engine based on fit and behavior
+- Pipeline SLA tracking for response-time accountability
+- Lost-deal reason analysis and objection tracking
+- Reactivation queue for stale leads
+- Sales handoff summaries generated from lead research
+- Win-pattern analysis across industries and campaigns
+- Deal health scores for active opportunities
+- Persona tagging inside the CRM
+- Expansion and upsell opportunity tracking
+- Lead source-to-revenue mapping
+
+### Reporting & Client Communication
+- Executive KPI snapshot for clients
+- Weekly wins and risks digest
+- Forecasted pipeline projection based on current lead flow
+- Cross-channel performance scoreboard
+- Goal variance alerts when KPIs slip
+- Landing page leaderboard by conversion rate
+- Lead quality trend reporting
+- Content ROI reporting tied to pipeline
+- Budget pacing monitor for ad accounts
+- Creative fatigue warnings for paid media
+
+### Marketing Automation
+- Instant lead routing to sales reps or inboxes
+- Missed-call text-back automation
+- Proposal follow-up sequence builder
+- Lead nurture workflows by funnel stage
+- No-show recovery automations
+- Review request and testimonial collection automations
+- High-intent visit alerts for key pages
+- Lead enrichment on form submission
+- Auto-reminders for client approvals and missing assets
+- Re-engagement sequences for cold leads
+
+### Content, SEO & Organic Growth
+- Topic cluster planner for SEO campaigns
+- Search intent brief generator for writers
+- Local SEO landing page template system
+- Content refresh opportunity finder
+- Competitor content gap analyzer
+- Schema markup recommendations
+- SEO opportunity scoring by business value
+- CTA consistency checker across blog and resource content
+- Case study publishing workflow
+- Repurposing engine for blogs, lead magnets, and email
+
+### Paid Media & Attribution
+- Creative testing tracker
+- Audience overlap analyzer
+- Budget reallocation recommendations
+- Lead quality by ad set and campaign
+- Retargeting sequence mapper
+- Underperforming keyword alerts
+- Revenue per lead by campaign
+- First-touch, last-touch, and multi-touch attribution views
+- Offline conversion import tracking
+- Call tracking source breakdown by campaign
+
+### Client Experience & Retention
+- Client onboarding checklist portal
+- Shared growth roadmap by business goal
+- Approval queue for ads, landing pages, and content
+- Client request intake center
+- Monthly strategy recap generator
+- Success plans tied to revenue targets
+- Churn-risk dashboard for subscription clients
+- Win-back campaigns for former customers
+- Cross-sell and upsell journey builder
+- Post-purchase education and onboarding sequences
+
+### Productized Agency Features
+- White-label client portal
+- Reusable campaign playbook templates
+- Multi-client dashboard with roll-up reporting
+- Role-based access for agency teams and clients
+- Saved implementation plans for different niches
+- Client-specific roadmap builder from Growth Hub ideas
+- Proposal add-ons generated from identified growth gaps
+- Task boards tied to campaigns and deliverables
+- Approval logs and audit trails
+- Recurring monthly growth opportunities list per client
+
+### Highest-Impact Features To Add First
+- Lead scoring and qualification engine
+- Funnel drop-off and conversion diagnostics
+- Proposal follow-up automation
+- Executive KPI dashboard for clients
+- Lead source-to-revenue attribution
+- Reactivation workflows for stale leads
+- Shared client growth roadmap
+- Paid campaign lead-quality reporting
+- SEO opportunity scoring
+- White-label client portal
+
+These features would move LeadGen beyond lead generation into a fuller agency operating system for acquisition, conversion, reporting, and retention.
+
+---
+
 ## Tech Stack
 
 | Layer | Tech |
