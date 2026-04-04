@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Trash2, ChevronDown } from 'lucide-react'
+import { Trash2, ChevronDown, Sparkles, Loader2, Copy, Check, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -39,6 +39,14 @@ interface Lead {
   lead_quality?: 'high' | 'medium' | 'low' | null
   estimated_revenue?: number | null
   created_at: string
+  industry?: string | null
+}
+
+interface LeadScore {
+  score: number
+  tier: 'hot' | 'warm' | 'cold'
+  reasoning: string
+  nextAction: string
 }
 
 const STATUS_OPTIONS: LeadStatus[] = ['new', 'researched', 'contacted', 'replied', 'qualified', 'closed_won', 'closed_lost']
@@ -53,11 +61,34 @@ const STATUS_VARIANT: Record<LeadStatus, 'default' | 'secondary' | 'success' | '
   closed_lost: 'destructive',
 }
 
+const TIER_COLORS: Record<string, string> = {
+  hot: 'text-red-600 bg-red-50 border-red-200',
+  warm: 'text-orange-600 bg-orange-50 border-orange-200',
+  cold: 'text-blue-600 bg-blue-50 border-blue-200',
+}
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [filter, setFilter] = useState<LeadStatus | 'all'>('all')
   const [selected, setSelected] = useState<Lead | null>(null)
   const [loading, setLoading] = useState(true)
+
+  // AI state
+  const [ollamaModel, setOllamaModel] = useState<string>('')
+  const [scoring, setScoring] = useState(false)
+  const [score, setScore] = useState<LeadScore | null>(null)
+  const [draftingOutreach, setDraftingOutreach] = useState(false)
+  const [draftedMessage, setDraftedMessage] = useState('')
+  const [outreachChannel, setOutreachChannel] = useState<'email' | 'linkedin' | 'twitter'>('email')
+  const [outreachTone, setOutreachTone] = useState<'professional' | 'casual' | 'direct' | 'warm'>('professional')
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/ollama/status')
+      .then(r => r.json())
+      .then(data => { if (data.models?.length) setOllamaModel(data.models[0]) })
+      .catch(() => {})
+  }, [])
 
   async function fetchLeads() {
     const url = filter === 'all' ? '/api/leads' : `/api/leads?status=${filter}`
@@ -70,6 +101,12 @@ export default function LeadsPage() {
   }
 
   useEffect(() => { fetchLeads() }, [filter])
+
+  function openLead(lead: Lead) {
+    setSelected(lead)
+    setScore(null)
+    setDraftedMessage('')
+  }
 
   async function updateStatus(id: string, status: LeadStatus) {
     const res = await fetch(`/api/leads/${id}`, {
@@ -91,6 +128,52 @@ export default function LeadsPage() {
       setSelected(null)
       toast.success('Lead deleted')
     }
+  }
+
+  async function scoreLead() {
+    if (!selected || !ollamaModel) return
+    setScoring(true)
+    setScore(null)
+    try {
+      const res = await fetch('/api/ollama/score-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: selected, model: ollamaModel }),
+      })
+      const data = await res.json()
+      if (!res.ok) { toast.error(data.error ?? 'Scoring failed'); return }
+      setScore(data)
+    } catch {
+      toast.error('Could not reach Ollama')
+    } finally {
+      setScoring(false)
+    }
+  }
+
+  async function draftOutreach() {
+    if (!selected || !ollamaModel) return
+    setDraftingOutreach(true)
+    setDraftedMessage('')
+    try {
+      const res = await fetch('/api/ollama/draft-outreach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: selected, channel: outreachChannel, tone: outreachTone, model: ollamaModel }),
+      })
+      const data = await res.json()
+      if (!res.ok) { toast.error(data.error ?? 'Draft failed'); return }
+      setDraftedMessage(data.message)
+    } catch {
+      toast.error('Could not reach Ollama')
+    } finally {
+      setDraftingOutreach(false)
+    }
+  }
+
+  async function copyText(text: string) {
+    await navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const filters: Array<LeadStatus | 'all'> = ['all', ...STATUS_OPTIONS]
@@ -142,7 +225,7 @@ export default function LeadsPage() {
                     <tr
                       key={lead.id}
                       className="cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => setSelected(lead)}
+                      onClick={() => openLead(lead)}
                     >
                       <td className="py-3 pr-4 font-medium">{lead.full_name || '—'}</td>
                       <td className="py-3 pr-4 text-muted-foreground">{lead.company}</td>
@@ -190,19 +273,24 @@ export default function LeadsPage() {
       {/* Lead detail dialog */}
       <Dialog open={!!selected} onOpenChange={open => !open && setSelected(null)}>
         {selected && (
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{selected.full_name || selected.company}</DialogTitle>
               <DialogDescription>{selected.title} — {selected.company}</DialogDescription>
             </DialogHeader>
-            <div className="space-y-3 text-sm">
-              {selected.email && (
-                <div><span className="font-medium">Email: </span>{selected.email}</div>
-              )}
-              <div>
-                <span className="font-medium">Status: </span>
-                <Badge variant={STATUS_VARIANT[selected.status]}>{selected.status.replace('_', ' ')}</Badge>
+
+            <div className="space-y-4 text-sm">
+              {/* Basic info */}
+              <div className="grid grid-cols-2 gap-2">
+                {selected.email && (
+                  <div><span className="font-medium">Email: </span>{selected.email}</div>
+                )}
+                <div>
+                  <span className="font-medium">Status: </span>
+                  <Badge variant={STATUS_VARIANT[selected.status]}>{selected.status.replace('_', ' ')}</Badge>
+                </div>
               </div>
+
               {selected.outreach_message && (
                 <div>
                   <p className="font-medium mb-1">Outreach message:</p>
@@ -218,7 +306,7 @@ export default function LeadsPage() {
                 </div>
               )}
               {(selected.lead_source || selected.acquisition_channel || selected.campaign_name || selected.ad_set_name) && (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <p className="font-medium">Campaign tracking</p>
                   {selected.lead_source && <div><span className="font-medium">Lead source: </span>{selected.lead_source}</div>}
                   {selected.acquisition_channel && <div><span className="font-medium">Channel: </span>{selected.acquisition_channel}</div>}
@@ -230,7 +318,125 @@ export default function LeadsPage() {
                   )}
                 </div>
               )}
+
+              {/* AI Lead Scoring */}
+              {ollamaModel && (
+                <div className="border rounded-lg p-4 space-y-3 bg-muted/30">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium flex items-center gap-1.5">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      AI Lead Score
+                    </p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={scoreLead}
+                      disabled={scoring}
+                      className="gap-1.5 h-7"
+                    >
+                      {scoring ? (
+                        <><Loader2 className="h-3 w-3 animate-spin" /> Scoring...</>
+                      ) : score ? (
+                        <><RefreshCw className="h-3 w-3" /> Re-score</>
+                      ) : (
+                        <><Sparkles className="h-3 w-3" /> Score lead</>
+                      )}
+                    </Button>
+                  </div>
+
+                  {score && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-2xl font-bold">{score.score}</span>
+                          <span className="text-muted-foreground text-xs">/10</span>
+                        </div>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border capitalize ${TIER_COLORS[score.tier] ?? ''}`}>
+                          {score.tier}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{score.reasoning}</p>
+                      <div className="rounded-md bg-primary/5 border border-primary/10 px-3 py-2">
+                        <p className="text-xs font-medium text-primary">Recommended next step</p>
+                        <p className="text-xs mt-0.5">{score.nextAction}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* AI Outreach Drafting */}
+              {ollamaModel && (
+                <div className="border rounded-lg p-4 space-y-3 bg-muted/30">
+                  <p className="font-medium flex items-center gap-1.5">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    Draft Outreach with AI
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <span className="text-muted-foreground">Channel:</span>
+                      {(['email', 'linkedin', 'twitter'] as const).map(ch => (
+                        <button
+                          key={ch}
+                          onClick={() => setOutreachChannel(ch)}
+                          className={`px-2 py-0.5 rounded-full border text-xs capitalize transition-colors ${outreachChannel === ch ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
+                        >
+                          {ch}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <span className="text-muted-foreground">Tone:</span>
+                      {(['professional', 'casual', 'direct', 'warm'] as const).map(tn => (
+                        <button
+                          key={tn}
+                          onClick={() => setOutreachTone(tn)}
+                          className={`px-2 py-0.5 rounded-full border text-xs capitalize transition-colors ${outreachTone === tn ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
+                        >
+                          {tn}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={draftOutreach}
+                    disabled={draftingOutreach}
+                    className="gap-1.5 h-7"
+                  >
+                    {draftingOutreach ? (
+                      <><Loader2 className="h-3 w-3 animate-spin" /> Drafting...</>
+                    ) : draftedMessage ? (
+                      <><RefreshCw className="h-3 w-3" /> Redraft</>
+                    ) : (
+                      <><Sparkles className="h-3 w-3" /> Draft message</>
+                    )}
+                  </Button>
+                  {draftedMessage && (
+                    <div className="relative">
+                      <p className="text-xs whitespace-pre-wrap rounded-md bg-background border p-3 pr-8 leading-relaxed">
+                        {draftedMessage}
+                      </p>
+                      <button
+                        onClick={() => copyText(draftedMessage)}
+                        className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
+                        title="Copy"
+                      >
+                        {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {!ollamaModel && (
+                <p className="text-xs text-muted-foreground border rounded-lg p-3 bg-muted/30">
+                  Start Ollama locally to enable AI lead scoring and outreach drafting.
+                </p>
+              )}
             </div>
+
             <div className="flex justify-end gap-2 pt-2">
               <Button
                 variant="destructive"

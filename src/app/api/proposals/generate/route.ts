@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { ollamaChat } from '@/lib/ollama'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -13,6 +14,8 @@ export async function POST(req: NextRequest) {
     budgetRange,
     timelineWeeks,
     additionalContext,
+    aiProvider = 'claude',
+    ollamaModel = 'llama3',
   } = await req.json()
 
   if (!clientName || !clientCompany || !projectType || !projectGoals) {
@@ -50,13 +53,23 @@ Generate a JSON response with this exact structure:
 Make the timeline appropriate for ${timelineWeeks}. Make pricing realistic for a ${projectType} project with ${budgetRange} budget.
 IMPORTANT: Return ONLY the JSON object, no markdown, no extra text.`
 
-  const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 2048,
-    messages: [{ role: 'user', content: prompt }],
-  })
+  let text: string
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : ''
+  if (aiProvider === 'ollama') {
+    try {
+      text = await ollamaChat(ollamaModel, [{ role: 'user', content: prompt }], { temperature: 0.7 })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Ollama unreachable'
+      return NextResponse.json({ error: `Ollama error: ${msg}` }, { status: 503 })
+    }
+  } else {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2048,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    text = response.content[0].type === 'text' ? response.content[0].text : ''
+  }
 
   let content
   try {
@@ -67,5 +80,5 @@ IMPORTANT: Return ONLY the JSON object, no markdown, no extra text.`
     content = JSON.parse(match[0])
   }
 
-  return NextResponse.json({ content })
+  return NextResponse.json({ content, aiProvider })
 }

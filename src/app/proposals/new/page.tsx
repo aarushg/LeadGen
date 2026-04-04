@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Save, Printer, Copy } from 'lucide-react'
+import { Loader2, Save, Printer, Bot, Sparkles } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -44,6 +45,22 @@ export default function NewProposalPage() {
   const [saving, setSaving] = useState(false)
   const [proposal, setProposal] = useState<ProposalContent | null>(null)
   const [formSnapshot, setFormSnapshot] = useState<FormData | null>(null)
+  const [aiProvider, setAiProvider] = useState<'claude' | 'ollama'>('claude')
+  const [ollamaModels, setOllamaModels] = useState<string[]>([])
+  const [ollamaModel, setOllamaModel] = useState('')
+  const [usedProvider, setUsedProvider] = useState('')
+
+  useEffect(() => {
+    fetch('/api/ollama/status')
+      .then(r => r.json())
+      .then(data => {
+        if (data.running && data.models?.length) {
+          setOllamaModels(data.models)
+          setOllamaModel(data.models[0])
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -57,14 +74,15 @@ export default function NewProposalPage() {
       const res = await fetch('/api/proposals/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, aiProvider, ollamaModel }),
       })
       if (!res.ok) {
         const err = await res.json()
         throw new Error(err.error || 'Generation failed')
       }
-      const { content } = await res.json()
+      const { content, aiProvider: ap } = await res.json()
       setProposal(content)
+      setUsedProvider(ap ?? aiProvider)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to generate proposal')
     } finally {
@@ -208,6 +226,53 @@ export default function NewProposalPage() {
                   />
                 </div>
 
+                {/* AI Provider */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">AI Engine</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setAiProvider('claude')}
+                      className={cn(
+                        'flex-1 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+                        aiProvider === 'claude'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'hover:bg-accent'
+                      )}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" /> Claude
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAiProvider('ollama')}
+                      disabled={ollamaModels.length === 0}
+                      className={cn(
+                        'flex-1 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
+                        aiProvider === 'ollama'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'hover:bg-accent'
+                      )}
+                    >
+                      <Bot className="h-3.5 w-3.5" /> Local AI
+                    </button>
+                  </div>
+                  {aiProvider === 'ollama' && ollamaModels.length > 0 && (
+                    <Select value={ollamaModel} onValueChange={setOllamaModel}>
+                      <SelectTrigger className="text-xs h-8">
+                        <SelectValue placeholder="Select model" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ollamaModels.map(m => (
+                          <SelectItem key={m} value={m}>{m}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  {ollamaModels.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Start Ollama to enable local AI</p>
+                  )}
+                </div>
+
                 <Button type="submit" className="w-full" disabled={generating}>
                   {generating ? (
                     <><Loader2 className="h-4 w-4 animate-spin" /> Generating...</>
@@ -224,7 +289,9 @@ export default function NewProposalPage() {
                 <CardContent className="flex flex-col items-center justify-center py-16">
                   <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
                   <p className="font-medium">Generating proposal...</p>
-                  <p className="text-sm text-muted-foreground mt-1">Claude is writing your proposal</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {aiProvider === 'ollama' ? `Local AI (${ollamaModel}) is writing your proposal` : 'Claude is writing your proposal'}
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -234,7 +301,13 @@ export default function NewProposalPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-3">
                     <CardTitle className="text-base">Proposal Preview</CardTitle>
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                      {usedProvider && (
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          {usedProvider === 'ollama' ? <Bot className="h-3 w-3" /> : <Sparkles className="h-3 w-3" />}
+                          {usedProvider === 'ollama' ? `Local AI (${ollamaModel})` : 'Claude'}
+                        </span>
+                      )}
                       <Button size="sm" variant="outline" onClick={() => window.print()}>
                         <Printer className="h-3.5 w-3.5" />
                       </Button>

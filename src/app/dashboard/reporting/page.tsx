@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { BarChart3, CircleDollarSign, Download, Mail, Megaphone, Printer, Search, Send } from 'lucide-react'
 import { db } from '@/lib/db'
+import { ReportingAISummary } from './ai-summary'
 import { buildCrossChannelReport, type ScoreboardChannel } from '@/lib/cross-channel-reporting'
 import { filterReportingLeads, getWindowDates, toDateInputValue, type ReportingWindow } from '@/lib/reporting-filters'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -56,6 +57,14 @@ export default async function ReportingPage({
 
   const filteredLeads = filterReportingLeads(leads, { selectedChannel, startDate, endDate })
 
+  const leadsForAI = filteredLeads.map(l => ({
+    company: l.company,
+    status: l.status,
+    lead_quality: l.lead_quality ?? null,
+    estimated_revenue: l.estimated_revenue ?? null,
+    acquisition_channel: l.acquisition_channel ?? null,
+  }))
+
   const report = buildCrossChannelReport(filteredLeads)
   const availableChannels: Array<ScoreboardChannel | 'All'> = ['All', 'Ads', 'Email', 'SEO', 'Outbound', 'Referral', 'Other']
   const exportParams = new URLSearchParams()
@@ -70,6 +79,8 @@ export default async function ReportingPage({
 
   return (
     <div className="space-y-6">
+      <ReportingAISummary leads={leadsForAI} />
+
       <div className="flex flex-col gap-4 rounded-3xl border bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl space-y-3">
           <Badge variant="secondary" className="w-fit">Reporting</Badge>

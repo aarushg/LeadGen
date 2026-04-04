@@ -2,6 +2,7 @@ import { db } from '@/lib/db'
 import { buildLeadScoringSnapshot, leadScoringRules } from '@/lib/agency-ops-data'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LeadScoringInsights } from './ai-insights'
 
 const tierVariant: Record<string, 'default' | 'secondary' | 'success' | 'warning' | 'destructive' | 'outline'> = {
   Hot: 'success',
@@ -13,6 +14,16 @@ export default async function LeadScoringPage() {
   const leads = await db.leads.list()
   const rows = buildLeadScoringSnapshot(leads)
 
+  // Slim lead data passed to client component for Ollama analysis
+  const leadsForAI = leads.map(l => ({
+    company: l.company,
+    status: l.status,
+    lead_quality: l.lead_quality ?? null,
+    estimated_revenue: l.estimated_revenue ?? null,
+    acquisition_channel: l.acquisition_channel ?? null,
+    notes: l.notes ?? null,
+  }))
+
   return (
     <div className="space-y-6">
       <div>
@@ -21,6 +32,8 @@ export default async function LeadScoringPage() {
           Prioritize the leads most likely to close using fit, status, revenue, and freshness signals.
         </p>
       </div>
+
+      <LeadScoringInsights leads={leadsForAI} />
 
       <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
         <Card>

@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Loader2, Save, Copy, Check } from 'lucide-react'
+import { Search, Loader2, Save, Copy, Check, Bot, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
 interface ResearchResult {
   brief: {
@@ -19,6 +20,7 @@ interface ResearchResult {
   }
   outreachMessage: string
   sources: Array<{ title: string; url: string }>
+  aiProvider?: string
 }
 
 export default function ResearchPage() {
@@ -42,6 +44,21 @@ export default function ResearchPage() {
   const [result, setResult] = useState<ResearchResult | null>(null)
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [aiProvider, setAiProvider] = useState<'claude' | 'ollama'>('claude')
+  const [ollamaModels, setOllamaModels] = useState<string[]>([])
+  const [ollamaModel, setOllamaModel] = useState('')
+
+  useEffect(() => {
+    fetch('/api/ollama/status')
+      .then(r => r.json())
+      .then(data => {
+        if (data.running && data.models?.length) {
+          setOllamaModels(data.models)
+          setOllamaModel(data.models[0])
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   function set(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -56,7 +73,7 @@ export default function ResearchPage() {
       const res = await fetch('/api/research', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, aiProvider, ollamaModel }),
       })
       if (!res.ok) {
         const err = await res.json()
@@ -274,6 +291,53 @@ export default function ResearchPage() {
                     </Select>
                   </div>
                 </div>
+                {/* AI Provider selector */}
+                <div className="space-y-2">
+                  <Label>AI Engine</Label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setAiProvider('claude')}
+                      className={cn(
+                        'flex-1 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+                        aiProvider === 'claude'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'hover:bg-accent'
+                      )}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" /> Claude
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAiProvider('ollama')}
+                      disabled={ollamaModels.length === 0}
+                      className={cn(
+                        'flex-1 flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
+                        aiProvider === 'ollama'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'hover:bg-accent'
+                      )}
+                    >
+                      <Bot className="h-3.5 w-3.5" /> Local AI
+                    </button>
+                  </div>
+                  {aiProvider === 'ollama' && ollamaModels.length > 0 && (
+                    <Select value={ollamaModel} onValueChange={setOllamaModel}>
+                      <SelectTrigger className="text-xs h-8">
+                        <SelectValue placeholder="Select model" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ollamaModels.map(m => (
+                          <SelectItem key={m} value={m}>{m}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  {ollamaModels.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Start Ollama to enable local AI</p>
+                  )}
+                </div>
+
                 <Button type="submit" className="w-full" disabled={loading || !form.company.trim()}>
                   {loading ? (
                     <><Loader2 className="h-4 w-4 animate-spin" /> Researching...</>
@@ -301,7 +365,15 @@ export default function ResearchPage() {
               <>
                 <Card>
                   <CardHeader>
+                    <div className="flex items-center justify-between">
                     <CardTitle className="text-base">Intelligence Brief</CardTitle>
+                    {result.aiProvider && (
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        {result.aiProvider === 'ollama' ? <Bot className="h-3 w-3" /> : <Sparkles className="h-3 w-3" />}
+                        {result.aiProvider === 'ollama' ? `Local AI (${ollamaModel})` : 'Claude'}
+                      </span>
+                    )}
+                  </div>
                   </CardHeader>
                   <CardContent className="space-y-4 text-sm">
                     <div>
