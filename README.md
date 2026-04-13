@@ -360,40 +360,56 @@ npm run dev
 LeadGen frontend runs on [http://localhost:3001](http://localhost:3001).
 
 ### Docker (Production Container)
-Windows quick start:
+Use Docker Desktop (Windows) and run from the project root.
+
+1. Create your container env file:
+```powershell
+copy .env.example .env.local
+```
+
+2. Add/update values in `.env.local` as needed for your environment.
+
+3. Start with the Windows helper script (builds + runs in detached mode):
 ```bat
 runondocker.bat
 ```
 
-Windows stop command:
+4. Open:
+- `http://localhost:3001`
+
+5. Stop with the matching helper script:
 ```bat
 stopondocker.bat
 ```
 
-1. Create `.env.local` (or reuse your existing one) with required values.
-
-2. Build and run with Docker Compose:
+Manual Docker Compose commands (alternative):
 ```bash
-docker compose up --build
-```
-
-3. Open:
-- `http://localhost:3001`
-
-4. Stop containers:
-```bash
+docker compose up --build -d
+docker compose logs -f
 docker compose down
 ```
 
-Direct Docker commands:
+Manual Docker image run (alternative):
 ```bash
 docker build -t leadgen:latest .
 docker run --rm -p 3001:3001 --env-file .env.local leadgen:latest
 ```
 
 Notes:
-- The app container runs with `NODE_ENV=production`.
-- If your backend API runs on your host machine, set `NEXT_PUBLIC_API_BASE_URL` in `.env.local` to a host-reachable URL from Docker (for example: `http://host.docker.internal:4000/api`).
+- The container runs the production Next.js server on port `3001`.
+- `docker-compose.yml` reads `.env.local` if present (it is optional).
+- If your backend API runs on the host machine, use a host-reachable URL in `.env.local` for `NEXT_PUBLIC_API_BASE_URL` (example: `http://host.docker.internal:4000/api`).
+
+#### Troubleshooting Docker
+- **Port 3001 already in use**
+	- Error example: `Bind for 0.0.0.0:3001 failed: port is already allocated`
+	- Fix: stop the process/container using 3001, or change the host port in `docker-compose.yml` from `3001:3001` to `3002:3001`, then open `http://localhost:3002`.
+- **Old container/image state causes weird behavior**
+	- Fix: run `docker compose down --remove-orphans`, then `docker compose up --build -d`.
+- **Environment variable changes are not applied**
+	- Fix: after editing `.env.local`, rebuild and restart with `docker compose up --build -d`.
+- **App cannot reach backend API running on your machine**
+	- Fix: set `NEXT_PUBLIC_API_BASE_URL` in `.env.local` to `http://host.docker.internal:4000/api` (or your backend port), then rebuild.
 
 ### Local data persistence
 - Local app data is stored in `data/db.json`.
