@@ -282,6 +282,9 @@ Below is a practical feature backlog you can add to LeadGen to make it more valu
 These features would move LeadGen beyond lead generation into a fuller agency operating system for acquisition, conversion, reporting, and retention.
 
 ### Recently Added
+- [x] Dockerized app with multi-stage production image (`Dockerfile`), `.dockerignore`, and `docker-compose.yml`
+- [x] Windows Docker launcher script (`runondocker.bat`) for one-click container startup
+- [x] Windows Docker stop script (`stopondocker.bat`) to shut down the stack cleanly
 - [x] Growth Hub expanded to 10,000 agency-ready feature ideas
 - [x] Growth Hub refreshed to remove shipped items and focus on next-step backlog ideas
 - [x] Growth Hub refreshed with 5 new roadmap ideas and 5 weaker backlog items removed
@@ -355,6 +358,42 @@ npm run dev
 ```
 
 LeadGen frontend runs on [http://localhost:3001](http://localhost:3001).
+
+### Docker (Production Container)
+Windows quick start:
+```bat
+runondocker.bat
+```
+
+Windows stop command:
+```bat
+stopondocker.bat
+```
+
+1. Create `.env.local` (or reuse your existing one) with required values.
+
+2. Build and run with Docker Compose:
+```bash
+docker compose up --build
+```
+
+3. Open:
+- `http://localhost:3001`
+
+4. Stop containers:
+```bash
+docker compose down
+```
+
+Direct Docker commands:
+```bash
+docker build -t leadgen:latest .
+docker run --rm -p 3001:3001 --env-file .env.local leadgen:latest
+```
+
+Notes:
+- The app container runs with `NODE_ENV=production`.
+- If your backend API runs on your host machine, set `NEXT_PUBLIC_API_BASE_URL` in `.env.local` to a host-reachable URL from Docker (for example: `http://host.docker.internal:4000/api`).
 
 ### Local data persistence
 - Local app data is stored in `data/db.json`.
