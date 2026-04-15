@@ -1,6 +1,7 @@
 <<<<<<< Updated upstream
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { ollamaChat } from '@/lib/ollama'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -21,7 +22,13 @@ async function tavilySearch(query: string, maxResults = 5) {
 }
 
 export async function POST(req: NextRequest) {
-  const { company, website, contactName, contactTitle, linkedinUrl, tone, channel } = await req.json()
+  const {
+    company, website, contactName, contactTitle, linkedinUrl,
+    tone, channel,
+    aiProvider = 'claude',
+    ollamaModel = 'llama3',
+  } = await req.json()
+
   if (!company) return NextResponse.json({ error: 'Company name is required' }, { status: 400 })
 
   // Parallel searches
@@ -59,13 +66,23 @@ Generate a JSON response with this exact structure:
 
 IMPORTANT: Return ONLY the JSON object, no markdown, no extra text.`
 
-  const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: prompt }],
-  })
+  let text: string
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : ''
+  if (aiProvider === 'ollama') {
+    try {
+      text = await ollamaChat(ollamaModel, [{ role: 'user', content: prompt }], { temperature: 0.7 })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Ollama unreachable'
+      return NextResponse.json({ error: `Ollama error: ${msg}` }, { status: 503 })
+    }
+  } else {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    text = response.content[0].type === 'text' ? response.content[0].text : ''
+  }
 
   let parsed
   try {
@@ -80,6 +97,7 @@ IMPORTANT: Return ONLY the JSON object, no markdown, no extra text.`
     brief: parsed.brief,
     outreachMessage: parsed.outreachMessage,
     sources: sources.map(s => ({ title: s.title, url: s.url })),
+    aiProvider,
   })
 =======
 import { NextRequest, NextResponse } from "next/server";

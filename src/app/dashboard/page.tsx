@@ -1,10 +1,11 @@
 import Link from 'next/link'
-import { Search, FileText, Users, TrendingUp, Plus, LibraryBig } from 'lucide-react'
+import { Search, FileText, Users, TrendingUp, Plus, LibraryBig, Lightbulb, Megaphone, BarChart3, BriefcaseBusiness } from 'lucide-react'
 import { db } from '@/lib/db'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { formatRelativeDate } from '@/lib/utils'
+import { growthFeatureIdeas, growthFeaturePriorityCounts } from '@/lib/growth-feature-ideas'
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'success' | 'warning' | 'destructive' | 'outline'> = {
   new: 'secondary',
@@ -123,8 +124,30 @@ export default async function DashboardPage() {
         </CardContent>
       </Card>
 
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 via-white to-emerald-50/80">
+        <CardContent className="flex flex-col gap-4 p-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-2xl space-y-2">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5 text-primary" />
+              <p className="font-semibold">New: Agency Growth Hub</p>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Explore {growthFeatureIdeas.length} growth features your agency can use to help clients win more leads,
+              improve conversions, tighten reporting, and expand retention.
+            </p>
+            <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+              <Badge variant="secondary">{growthFeaturePriorityCounts.High ?? 0} high-priority ideas</Badge>
+              <Badge variant="outline">10 strategic categories</Badge>
+            </div>
+          </div>
+          <Button asChild>
+            <Link href="/dashboard/growth-hub">Open Growth Hub</Link>
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Quick actions */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-8">
         <Link href="/research" className="group">
           <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
             <CardContent className="flex flex-col items-center justify-center py-8 text-center">
@@ -166,6 +189,50 @@ export default async function DashboardPage() {
               </div>
               <p className="font-semibold">Tools Library</p>
               <p className="text-sm text-muted-foreground mt-1">Compare top lead generation platforms</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/growth-hub" className="group">
+          <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Lightbulb className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-semibold">Growth Hub</p>
+              <p className="text-sm text-muted-foreground mt-1">100 agency-ready features to grow client revenue</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/paid-campaigns" className="group">
+          <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Megaphone className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-semibold">Paid Campaigns</p>
+              <p className="text-sm text-muted-foreground mt-1">Report lead quality by channel, campaign, and ad set</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/reporting" className="group">
+          <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <BarChart3 className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-semibold">Reporting</p>
+              <p className="text-sm text-muted-foreground mt-1">Compare ads, email, SEO, and outbound in one scoreboard</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/agency-ops" className="group">
+          <Card className="h-full transition-shadow hover:shadow-md cursor-pointer">
+            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <BriefcaseBusiness className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-semibold">Agency Ops</p>
+              <p className="text-sm text-muted-foreground mt-1">Run personalization, launch planning, renewal risk, and more</p>
             </CardContent>
           </Card>
         </Link>

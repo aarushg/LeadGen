@@ -6,6 +6,7 @@ const DATA_DIR = join(process.cwd(), 'data')
 const DB_FILE = join(DATA_DIR, 'db.json')
 
 export type LeadStatus = 'new' | 'researched' | 'contacted' | 'replied' | 'qualified' | 'closed_won' | 'closed_lost'
+export type LeadQuality = 'high' | 'medium' | 'low'
 
 export interface Lead {
   id: string
@@ -19,6 +20,12 @@ export interface Lead {
   notes?: string
   outreach_message?: string
   research_data?: string
+  lead_source?: string
+  acquisition_channel?: string
+  campaign_name?: string
+  ad_set_name?: string
+  lead_quality?: LeadQuality
+  estimated_revenue?: number
   created_at: string
   updated_at: string
 }
