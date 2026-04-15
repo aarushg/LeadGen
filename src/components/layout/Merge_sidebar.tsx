@@ -1,28 +1,4 @@
-"use client";
 
-<<<<<<< HEAD
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Search,
-  FileText,
-  Settings,
-  Zap,
-  LogOut,
-  X,
-} from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-
-const NAV_ITEMS = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/research", icon: Search, label: "Lead Research" },
-  { href: "/proposals", icon: FileText, label: "Proposals" },
-  { href: "/settings", icon: Settings, label: "Settings" },
-];
-=======
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot } from 'lucide-react'
@@ -43,7 +19,6 @@ const navItems = [
   { href: '/dashboard/ai-assistant', label: 'AI Assistant', icon: Bot },
   { href: '/settings', label: 'Settings', icon: Settings },
 ]
->>>>>>> 4c5802a5c619a7a92d0887262e6510104eebcf41
 
 interface SidebarProps {
   onClose?: () => void;
