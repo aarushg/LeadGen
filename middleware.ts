@@ -50,10 +50,10 @@ async function refreshAccessToken(request: NextRequest) {
 }
 
 function isProtectedPath(pathname: string): boolean {
-  if (pathname === '/') return true
+  if (pathname === '/') return false;
   return PROTECTED_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
-  )
+  );
 }
 
 export function middleware(request: NextRequest) {
