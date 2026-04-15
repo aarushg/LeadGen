@@ -68,16 +68,24 @@ function persistClientToken(data: AuthResponse) {
   const refreshToken = data.refreshToken
 
   if (accessToken) {
-    // Persist access token as a cookie so Next.js middleware can read it.
-    const accessMaxAge = 60 * 15 // 15 minutes
+    const accessMaxAge = 60 * 15
     document.cookie = `access_token=${encodeURIComponent(accessToken)}; Path=/; SameSite=Lax; Max-Age=${accessMaxAge}`
   }
 
   if (refreshToken) {
-    // Keep refresh token longer, similar to NurseApp refresh session behavior.
-    const refreshMaxAge = 60 * 60 * 24 * 30 // 30 days
+    const refreshMaxAge = 60 * 60 * 24 * 30
     document.cookie = `refresh_token=${encodeURIComponent(refreshToken)}; Path=/; SameSite=Lax; Max-Age=${refreshMaxAge}`
   }
+}
+
+function persistAuthIdentity(userId: string, role: AuthRole) {
+  if (typeof document === 'undefined') {
+    return
+  }
+
+  const maxAge = 60 * 60 * 24 * 30
+  document.cookie = `auth_user_id=${encodeURIComponent(userId)}; Path=/; SameSite=Lax; Max-Age=${maxAge}`
+  document.cookie = `auth_role=${encodeURIComponent(role)}; Path=/; SameSite=Lax; Max-Age=${maxAge}`
 }
 
 export function clearClientToken() {
@@ -85,6 +93,8 @@ export function clearClientToken() {
   document.cookie = 'access_token=; Path=/; Max-Age=0; SameSite=Lax'
   document.cookie = 'refresh_token=; Path=/; Max-Age=0; SameSite=Lax'
   document.cookie = 'demo_mode=; Path=/; Max-Age=0; SameSite=Lax'
+  document.cookie = 'auth_user_id=; Path=/; Max-Age=0; SameSite=Lax'
+  document.cookie = 'auth_role=; Path=/; Max-Age=0; SameSite=Lax'
 }
 
 function setDemoMode(enabled: boolean) {
@@ -143,12 +153,6 @@ function saveStoredDemoAccounts(accounts: DemoAccount[]) {
   window.localStorage.setItem(DEMO_ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts))
 }
 
-function getDemoAccountsByRole(role: AuthRole) {
-  const baseAccounts = getBaseDemoAccounts()
-  const storedAccounts = getStoredDemoAccounts()
-  return [...baseAccounts, ...storedAccounts].filter((account) => account.role === role)
-}
-
 function hasDemoAccount(email: string) {
   const normalizedEmail = email.trim().toLowerCase()
   return [...getBaseDemoAccounts(), ...getStoredDemoAccounts()].some(
@@ -176,6 +180,10 @@ async function post<T>(path: string, body: Record<string, unknown>): Promise<T> 
 export async function signIn(email: string, password: string) {
   const data = await post<AuthResponse>('/auth/login', { email, password })
   persistClientToken(data)
+  if (data.user?.id) {
+    const role = (data.user.role as AuthRole | undefined) ?? 'nurse'
+    persistAuthIdentity(data.user.id, role)
+  }
   return data
 }
 
@@ -203,11 +211,11 @@ export async function loginUser({
       throw new Error('Invalid login. Use one of the demo accounts.')
     }
 
-    // Create synthetic tokens so middleware/protected layouts can work in demo mode.
     persistClientToken({
       accessToken: `demo-access-${account.id}`,
       refreshToken: `demo-refresh-${account.id}`,
     })
+    persistAuthIdentity(account.id, account.role)
     setDemoMode(true)
 
     return {
@@ -228,15 +236,16 @@ export async function loginUser({
   setDemoMode(false)
 
   const userId = result.user?.id || 'unknown-user'
-  const userRole = result.user?.role || role
+  const userRole = (result.user?.role as AuthRole | undefined) ?? role
+  persistAuthIdentity(userId, userRole)
 
   return {
     mode: 'express',
-    role,
+    role: userRole,
     user: {
       id: userId,
       email: email.trim(),
-      rawRole: userRole,
+      rawRole: result.user?.role,
     },
     accessToken: result.accessToken || result.token || result.jwt,
     refreshToken: result.refreshToken,
@@ -250,6 +259,10 @@ export async function signUp(email: string, password: string, fullName: string) 
     fullName,
   })
   persistClientToken(data)
+  if (data.user?.id) {
+    const role = (data.user.role as AuthRole | undefined) ?? 'nurse'
+    persistAuthIdentity(data.user.id, role)
+  }
   return data
 }
 
@@ -335,6 +348,10 @@ export async function refreshSession() {
 
   const data = await post<AuthResponse>('/auth/refresh', { refreshToken })
   persistClientToken(data)
+  if (data.user?.id) {
+    const role = (data.user.role as AuthRole | undefined) ?? 'nurse'
+    persistAuthIdentity(data.user.id, role)
+  }
   return data
 }
 

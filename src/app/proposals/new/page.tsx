@@ -39,6 +39,11 @@ interface ProposalContent {
   callToAction: string
 }
 
+interface ClientAccount {
+  id: string
+  name: string
+}
+
 export default function NewProposalPage() {
   const router = useRouter()
   const [generating, setGenerating] = useState(false)
@@ -49,6 +54,8 @@ export default function NewProposalPage() {
   const [ollamaModels, setOllamaModels] = useState<string[]>([])
   const [ollamaModel, setOllamaModel] = useState('')
   const [usedProvider, setUsedProvider] = useState('')
+  const [clients, setClients] = useState<ClientAccount[]>([])
+  const [selectedClientId, setSelectedClientId] = useState('')
 
   useEffect(() => {
     fetch('/api/ollama/status')
@@ -60,6 +67,13 @@ export default function NewProposalPage() {
         }
       })
       .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/clients')
+      .then((r) => (r.ok ? r.json() : { clients: [] }))
+      .then((data) => setClients(data.clients ?? []))
+      .catch(() => setClients([]))
   }, [])
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
@@ -92,12 +106,18 @@ export default function NewProposalPage() {
 
   async function saveProposal() {
     if (!proposal || !formSnapshot) return
+    if (clients.length > 0 && !selectedClientId) {
+      toast.error('Select a client before saving the proposal')
+      return
+    }
+
     setSaving(true)
     try {
       const res = await fetch('/api/proposals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          client_id: selectedClientId || undefined,
           client_name: formSnapshot.clientName,
           client_company: formSnapshot.clientCompany,
           client_email: formSnapshot.clientEmail || null,
@@ -134,6 +154,20 @@ export default function NewProposalPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Client Workspace</Label>
+                  <Select value={selectedClientId} onValueChange={setSelectedClientId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={clients.length ? 'Select client' : 'No clients assigned'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clients.map(client => (
+                        <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="clientName">Client Name *</Label>

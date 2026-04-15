@@ -10,6 +10,8 @@ export type LeadQuality = 'high' | 'medium' | 'low'
 
 export interface Lead {
   id: string
+  owner_user_id?: string
+  client_id?: string
   full_name?: string
   company: string
   title?: string
@@ -32,9 +34,32 @@ export interface Lead {
 
 export interface Proposal {
   id: string
+  owner_user_id?: string
+  client_id?: string
   lead_id?: string
   content: object
   status: string
+  created_at: string
+  updated_at: string
+}
+
+export type AppRole = 'admin' | 'nurse' | 'lawyer' | 'dreamer'
+
+export interface AppUser {
+  id: string
+  email: string
+  full_name: string
+  role: AppRole
+  managed_by_admin_id?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface ClientAccount {
+  id: string
+  name: string
+  owner_admin_id: string
+  assigned_user_ids: string[]
   created_at: string
   updated_at: string
 }
@@ -66,6 +91,8 @@ export interface ToolEvent {
 }
 
 interface DBData {
+  users: AppUser[]
+  clients: ClientAccount[]
   leads: Lead[]
   proposals: Proposal[]
   tools: Tool[]
@@ -80,15 +107,79 @@ async function read(): Promise<DBData> {
   try {
     const raw = await readFile(DB_FILE, 'utf-8')
     const parsed = JSON.parse(raw) as Partial<DBData>
-    return {
+    const state: DBData = {
+      users: parsed.users ?? [],
+      clients: parsed.clients ?? [],
       leads: parsed.leads ?? [],
       proposals: parsed.proposals ?? [],
       tools: parsed.tools ?? [],
       tool_states: parsed.tool_states ?? [],
       tool_events: parsed.tool_events ?? [],
     }
+
+    let shouldWrite = false
+
+    if (!state.users.some((u) => u.id === 'admin-1')) {
+      const now = new Date().toISOString()
+      state.users.push({
+        id: 'admin-1',
+        email: 'admin@dreamcatcher.app',
+        full_name: 'System Admin',
+        role: 'admin',
+        created_at: now,
+        updated_at: now,
+      })
+      shouldWrite = true
+    }
+
+    if (!state.users.some((u) => u.id === 'nurse-1')) {
+      const now = new Date().toISOString()
+      state.users.push({
+        id: 'nurse-1',
+        email: 'anjali@dreamcatcher.app',
+        full_name: 'Managed User',
+        role: 'nurse',
+        managed_by_admin_id: 'admin-1',
+        created_at: now,
+        updated_at: now,
+      })
+      shouldWrite = true
+    }
+
+    if (shouldWrite) {
+      await enqueueWrite(state)
+    }
+
+    return state
   } catch {
-    return { leads: [], proposals: [], tools: [], tool_states: [], tool_events: [] }
+    const now = new Date().toISOString()
+    return {
+      users: [
+        {
+          id: 'admin-1',
+          email: 'admin@dreamcatcher.app',
+          full_name: 'System Admin',
+          role: 'admin',
+          created_at: now,
+          updated_at: now,
+        },
+        {
+          id: 'nurse-1',
+          email: 'anjali@dreamcatcher.app',
+          full_name: 'Managed User',
+          role: 'nurse',
+          managed_by_admin_id: 'admin-1',
+          created_at: now,
+          updated_at: now,
+        },
+      ],
+      clients: [],
+      leads: [],
+      proposals: [],
+      tools: [],
+      tool_states: [],
+      tool_events: [],
+    }
   }
 }
 
@@ -101,6 +192,95 @@ function enqueueWrite(data: DBData): Promise<void> {
 }
 
 export const db = {
+  users: {
+    async list(): Promise<AppUser[]> {
+      const { users } = await read()
+      return [...users].sort((a, b) => a.full_name.localeCompare(b.full_name))
+    },
+
+    async get(id: string): Promise<AppUser | null> {
+      const { users } = await read()
+      return users.find((u) => u.id === id) ?? null
+    },
+
+    async create(data: {
+      email: string
+      full_name: string
+      role: Exclude<AppRole, 'admin'>
+      managed_by_admin_id: string
+    }): Promise<AppUser> {
+      const state = await read()
+      const now = new Date().toISOString()
+      const normalizedEmail = data.email.trim().toLowerCase()
+
+      if (state.users.some((u) => u.email.toLowerCase() === normalizedEmail)) {
+        throw new Error('User with this email already exists')
+      }
+
+      const user: AppUser = {
+        id: randomUUID(),
+        email: normalizedEmail,
+        full_name: data.full_name,
+        role: data.role,
+        managed_by_admin_id: data.managed_by_admin_id,
+        created_at: now,
+        updated_at: now,
+      }
+
+      state.users.push(user)
+      await enqueueWrite(state)
+      return user
+    },
+  },
+
+  clients: {
+    async list(): Promise<ClientAccount[]> {
+      const { clients } = await read()
+      return [...clients].sort((a, b) => a.name.localeCompare(b.name))
+    },
+
+    async get(id: string): Promise<ClientAccount | null> {
+      const { clients } = await read()
+      return clients.find((c) => c.id === id) ?? null
+    },
+
+    async create(data: {
+      name: string
+      owner_admin_id: string
+      assigned_user_ids?: string[]
+    }): Promise<ClientAccount> {
+      const state = await read()
+      const now = new Date().toISOString()
+      const client: ClientAccount = {
+        id: randomUUID(),
+        name: data.name,
+        owner_admin_id: data.owner_admin_id,
+        assigned_user_ids: [...new Set(data.assigned_user_ids ?? [])],
+        created_at: now,
+        updated_at: now,
+      }
+
+      state.clients.push(client)
+      await enqueueWrite(state)
+      return client
+    },
+
+    async assignUsers(clientId: string, userIds: string[]): Promise<ClientAccount | null> {
+      const state = await read()
+      const idx = state.clients.findIndex((c) => c.id === clientId)
+      if (idx === -1) return null
+
+      state.clients[idx] = {
+        ...state.clients[idx],
+        assigned_user_ids: [...new Set(userIds)],
+        updated_at: new Date().toISOString(),
+      }
+
+      await enqueueWrite(state)
+      return state.clients[idx]
+    },
+  },
+
   leads: {
     async list(status?: string): Promise<Lead[]> {
       const { leads } = await read()

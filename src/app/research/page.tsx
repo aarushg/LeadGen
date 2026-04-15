@@ -23,9 +23,15 @@ interface ResearchResult {
   aiProvider?: string
 }
 
+interface ClientAccount {
+  id: string
+  name: string
+}
+
 export default function ResearchPage() {
   const router = useRouter()
   const [form, setForm] = useState({
+    clientId: '',
     company: '',
     website: '',
     contactName: '',
@@ -44,6 +50,7 @@ export default function ResearchPage() {
   const [result, setResult] = useState<ResearchResult | null>(null)
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [clients, setClients] = useState<ClientAccount[]>([])
   const [aiProvider, setAiProvider] = useState<'claude' | 'ollama'>('claude')
   const [ollamaModels, setOllamaModels] = useState<string[]>([])
   const [ollamaModel, setOllamaModel] = useState('')
@@ -58,6 +65,13 @@ export default function ResearchPage() {
         }
       })
       .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/clients')
+      .then((r) => (r.ok ? r.json() : { clients: [] }))
+      .then((data) => setClients(data.clients ?? []))
+      .catch(() => setClients([]))
   }, [])
 
   function set(key: string, value: string) {
@@ -90,12 +104,18 @@ export default function ResearchPage() {
 
   async function saveLead() {
     if (!result) return
+    if (clients.length > 0 && !form.clientId) {
+      toast.error('Select a client before saving this lead')
+      return
+    }
+
     setSaving(true)
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            client_id: form.clientId || undefined,
             company: form.company,
             company_website: form.website,
             full_name: form.contactName,
@@ -147,6 +167,19 @@ export default function ResearchPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Client</Label>
+                  <Select value={form.clientId} onValueChange={v => set('clientId', v)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={clients.length ? 'Select client' : 'No clients assigned'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clients.map(client => (
+                        <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="company">Company Name *</Label>
                   <Input

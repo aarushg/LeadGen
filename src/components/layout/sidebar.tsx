@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot } from 'lucide-react'
+import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot, ShieldCheck, Layers3, Factory } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -18,6 +18,9 @@ const navItems = [
   { href: '/proposals', label: 'Proposals', icon: FileText },
   { href: '/dashboard/leads', label: 'CRM', icon: Users },
   { href: '/dashboard/ai-assistant', label: 'AI Assistant', icon: Bot },
+  { href: '/dashboard/feature-studio', label: 'Feature Studio', icon: Layers3 },
+  { href: '/dashboard/lead-generation-factory', label: 'LeadGen Factory 10,000', icon: Factory },
+  { href: '/dashboard/admin', label: 'Admin Workspace', icon: ShieldCheck },
   { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
