@@ -7,16 +7,27 @@ import { API_BASE_URL } from '@/lib/config/api'
  * layout or page. Redirects to /login if the access_token cookie is absent.
  */
 export async function requireAuth() {
-  const cookieStore = await cookies()
-  const demoMode = cookieStore.get('demo_mode')?.value === '1'
-  let accessToken = cookieStore.get('access_token')?.value
-  const refreshToken = cookieStore.get('refresh_token')?.value
+  const cookieStore = await cookies();
+  const demoMode = cookieStore.get('demo_mode')?.value === '1';
+  const accessToken = cookieStore.get('access_token')?.value;
 
-  if (demoMode && accessToken) {
-    return
+  // Accept NextAuth session cookies (JWT and non-JWT)
+  const nextAuthToken = cookieStore.get('next-auth.session-token')?.value;
+  const nextAuthLegacy = cookieStore.get('__Secure-next-auth.session-token')?.value;
+  if (nextAuthToken || nextAuthLegacy) {
+    return;
   }
 
-  if (!accessToken && refreshToken) {
+  // Allow demo logins (set by demo credentials)
+  if (demoMode && accessToken) {
+    return;
+  }
+
+  // Fallback to legacy logic (if not demo mode)
+  const refreshToken = cookieStore.get('refresh_token')?.value;
+  let validAccessToken = accessToken;
+
+  if (!validAccessToken && refreshToken) {
     try {
       const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
         method: 'POST',
@@ -25,38 +36,38 @@ export async function requireAuth() {
         },
         body: JSON.stringify({ refreshToken }),
         cache: 'no-store',
-      })
+      });
 
       if (refreshResponse.ok) {
         const refreshData = (await refreshResponse.json()) as {
-          accessToken?: string
-          token?: string
-          jwt?: string
-        }
-        accessToken = refreshData.accessToken || refreshData.token || refreshData.jwt
+          accessToken?: string;
+          token?: string;
+          jwt?: string;
+        };
+        validAccessToken = refreshData.accessToken || refreshData.token || refreshData.jwt;
       }
     } catch {
-      redirect('/login')
+      redirect('/login');
     }
   }
 
-  if (!accessToken) {
-    redirect('/login')
+  if (!validAccessToken) {
+    redirect('/login');
   }
 
   try {
     const response = await fetch(`${API_BASE_URL}/me`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${validAccessToken}`,
       },
       cache: 'no-store',
-    })
+    });
 
     if (!response.ok) {
-      redirect('/login')
+      redirect('/login');
     }
   } catch {
-    redirect('/login')
+    redirect('/login');
   }
 }

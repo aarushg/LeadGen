@@ -41,12 +41,12 @@ export default function LoginPage() {
       {/* Card */}
       <form className="glass rounded-2xl p-6" onSubmit={handleLogin}>
         <div>
-          <label className="text-sm font-medium mb-1.5 block">Email</label>
+          <label className="text-sm font-medium mb-1.5 block">Username or Email</label>
           <input
-            type="email"
+            type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@company.com"
+            placeholder="admin or you@company.com"
             required
             className="w-full px-3 py-2.5 rounded-lg bg-secondary border border-border focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-colors"
           />

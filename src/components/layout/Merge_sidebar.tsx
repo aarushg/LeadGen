@@ -53,7 +53,7 @@ export function Sidebar({ onClose }: SidebarProps) {
 
       {/* Nav */}
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        {NAV_ITEMS.map((item) => {
+        {navItems.map((item) => {
           const active =
             pathname === item.href ||
             (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -89,3 +89,4 @@ export function Sidebar({ onClose }: SidebarProps) {
     </aside>
   );
 }
+export default Sidebar;

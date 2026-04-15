@@ -5,7 +5,13 @@ const PROTECTED_PREFIXES = ['/dashboard', '/proposals', '/research', '/settings'
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'
 
 function isAuthenticated(request: NextRequest): boolean {
-  return Boolean(request.cookies.get('access_token')?.value)
+  // Accept either demo access_token or NextAuth session token
+  const accessToken = request.cookies.get('access_token')?.value;
+  // NextAuth session cookie (JWT strategy)
+  const nextAuthToken = request.cookies.get('next-auth.session-token')?.value;
+  // NextAuth session cookie (non-JWT strategy, for some deployments)
+  const nextAuthLegacy = request.cookies.get('__Secure-next-auth.session-token')?.value;
+  return Boolean(accessToken || nextAuthToken || nextAuthLegacy);
 }
 
 async function refreshAccessToken(request: NextRequest) {
