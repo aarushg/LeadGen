@@ -283,5 +283,4 @@ export default function LandingPage() {
       </footer>
     </div>
   );
->>>>>>> Stashed changes
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { researchLead, formatResultsForClaude } from "@/lib/tavily";
-import { synthesizeResearch } from "@/lib/claude";
+// import { synthesizeResearch } from "@/lib/claude";
 import { researchSchema } from "@/lib/validations";
 
 export async function POST(req: NextRequest) {
@@ -54,9 +54,6 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { researchLead, formatResultsForClaude } from "@/lib/tavily";
 import { synthesizeResearch } from "@/lib/claude";
 import { researchSchema } from "@/lib/validations";
 
@@ -109,5 +106,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
->>>>>>> Stashed changes
 }
