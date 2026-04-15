@@ -29,7 +29,10 @@ const demoNurseAccounts = [
 
 const demoLawyerAccounts = [{ id: 'lawyer-1', email: 'priya@dreamcatcher.app', password: 'demo123' }]
 
-const demoAdminAccounts = [{ id: 'admin-1', email: 'admin@dreamcatcher.app', password: 'admin' }]
+const demoAdminAccounts = [
+  { id: 'admin-1', email: 'admin@dreamcatcher.app', password: 'admin' },
+  { id: 'admin-2', email: 'admin', password: 'admin' },
+]
 
 const demoWorkPermitAccounts = [{ id: 'wp-1', email: 'rajesh@dreamcatcher.app', password: 'demo123' }]
 
