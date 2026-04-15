@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  name     String?
+  leads    Lead[]
+  proposals Proposal[]
+}
+
+model Lead {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  fullName    String?
+  title       String?
+  company     String
+  companyWebsite String?
+  linkedinUrl String?
+  twitterUrl  String?
+  email       String?
+  researchData Json?
+  outreachMessage String?
+  outreachTone String?
+  outreachChannel String?
+  status      String   @default("new")
+  tags        String?
+  notes       String?
+  lastContactedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  proposals   Proposal[]
+}
+
+model Proposal {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id])
+  userId           String
+  lead             Lead?    @relation(fields: [leadId], references: [id])
+  leadId           String?
+  clientName       String
+  clientCompany    String
+  clientEmail      String?
+  projectType      String?
+  projectGoals     String?
+  budgetRange      String?
+  timelineWeeks    Int?
+  additionalContext String?
+  content          Json
+  status           String   @default("draft")
+  sentAt           DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

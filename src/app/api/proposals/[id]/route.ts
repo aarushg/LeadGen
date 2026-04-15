@@ -1,77 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 
-export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const { data, error } = await supabase
-      .from("proposals")
-      .select("*")
-      .eq("id", id)
-      .eq("user_id", user.id)
-      .single();
-
-    if (error || !data) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-    return NextResponse.json({ proposal: data });
+    // TODO: Replace with real user auth
+    const userId = "1";
+    const proposal = await prisma.proposal.findFirst({
+      where: { id, userId },
+    });
+    if (!proposal) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ proposal });
   } catch {
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
 
-export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
+    // TODO: Replace with real user auth
+    const userId = "1";
     const body = await req.json();
-
-    const { data, error } = await supabase
-      .from("proposals")
-      .update(body)
-      .eq("id", id)
-      .eq("user_id", user.id)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return NextResponse.json({ proposal: data });
+    const proposal = await prisma.proposal.update({
+      where: { id },
+      data: body,
+    });
+    return NextResponse.json({ proposal });
   } catch {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
 
-export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const { error } = await supabase
-      .from("proposals")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", user.id);
-
-    if (error) throw error;
-
+    // TODO: Replace with real user auth
+    const userId = "1";
+    await prisma.proposal.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });

@@ -14,7 +14,6 @@ import {
   Loader2,
   ChevronDown,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { type Proposal, PROPOSAL_STATUS_COLORS, PROJECT_TYPE_LABELS } from "@/types/proposal";
 import { formatDate, cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -22,19 +21,17 @@ import { toast } from "sonner";
 export default function ProposalDetailPage() {
   const { proposalId } = useParams<{ proposalId: string }>();
   const router = useRouter();
-  const supabase = createClient();
   const [proposal, setProposal] = useState<Proposal | null>(null);
   const [loading, setLoading] = useState(true);
   const [statusOpen, setStatusOpen] = useState(false);
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from("proposals")
-        .select("*")
-        .eq("id", proposalId)
-        .single();
-      setProposal(data as Proposal);
+      setLoading(true);
+      const res = await fetch(`/api/proposals/${proposalId}`);
+        const { proposal } = await res.json();
+        setProposal(proposal);
+      }
       setLoading(false);
     }
     load();
@@ -42,7 +39,11 @@ export default function ProposalDetailPage() {
 
   async function updateStatus(status: Proposal["status"]) {
     setStatusOpen(false);
-    await supabase.from("proposals").update({ status, ...(status === "sent" ? { sent_at: new Date().toISOString() } : {}) }).eq("id", proposalId);
+    await fetch(`/api/proposals/${proposalId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status, ...(status === "sent" ? { sent_at: new Date().toISOString() } : {}) }),
+    });
     setProposal((prev) => prev ? { ...prev, status } : null);
     toast.success(`Marked as ${status}`);
   }

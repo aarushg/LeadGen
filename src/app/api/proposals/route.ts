@@ -1,44 +1,30 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 import { generateProposal } from "@/lib/claude";
 import { intakeFormSchema } from "@/lib/validations";
 
-export async function GET(req: NextRequest) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const { data, error } = await supabase
-      .from("proposals")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-
-    return NextResponse.json({ proposals: data });
+    // TODO: Replace with real user auth
+    const userId = "1";
+    const proposals = await prisma.proposal.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json({ proposals });
   } catch {
     return NextResponse.json({ error: "Failed to fetch proposals" }, { status: 500 });
   }
 }
 
-export async function POST(req: NextRequest) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
+    // TODO: Replace with real user auth
+    const userId = "1";
     const body = await req.json();
     const parsed = intakeFormSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-
-    const {
-    } = parsed.data;
-
     const {
       clientName,
       clientCompany,
@@ -50,8 +36,6 @@ export async function POST(req: NextRequest) {
       additionalContext,
       leadId,
     } = parsed.data;
-
-    // Generate proposal content with Claude
     const content = await generateProposal({
       clientName,
       clientCompany,
@@ -61,30 +45,23 @@ export async function POST(req: NextRequest) {
       timelineWeeks,
       additionalContext,
     });
-
-    // Save to DB
-    const { data, error } = await supabase
-      .from("proposals")
-      .insert({
-        user_id: user.id,
-        lead_id: leadId || null,
-        client_name: clientName,
-        client_company: clientCompany,
-        client_email: clientEmail || null,
-        project_type: projectType,
-        project_goals: projectGoals,
-        budget_range: budgetRange,
-        timeline_weeks: timelineWeeks,
-        additional_context: additionalContext || null,
+    const proposal = await prisma.proposal.create({
+      data: {
+        userId,
+        leadId: leadId || null,
+        clientName,
+        clientCompany,
+        clientEmail: clientEmail || null,
+        projectType,
+        projectGoals,
+        budgetRange,
+        timelineWeeks,
+        additionalContext: additionalContext || null,
         content,
         status: "draft",
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return NextResponse.json({ proposal: data }, { status: 201 });
+      },
+    });
+    return NextResponse.json({ proposal }, { status: 201 });
   } catch (err) {
     console.error("[POST /api/proposals]", err);
     return NextResponse.json(

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+// import { createClient } from "@/lib/supabase/client";
 import {
   ArrowLeft,
   Building2,
@@ -19,6 +19,7 @@ import { type Lead, LEAD_STATUS_LABELS, LEAD_STATUS_COLORS } from "@/types/lead"
 import { formatDate, cn } from "@/lib/utils";
 import { toast } from "sonner";
 
+// Supabase removed
 const STATUSES = [
   "new", "researched", "contacted", "replied", "qualified", "closed_won", "closed_lost",
 ] as const;
@@ -26,7 +27,6 @@ const STATUSES = [
 export default function LeadDetailPage() {
   const { leadId } = useParams<{ leadId: string }>();
   const router = useRouter();
-  const supabase = createClient();
   const [lead, setLead] = useState<Lead | null>(null);
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState("");
@@ -35,14 +35,12 @@ export default function LeadDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("id", leadId)
-        .single();
-      if (data) {
-        setLead(data as Lead);
-        setNotes((data as Lead).notes || "");
+      setLoading(true);
+      const res = await fetch(`/api/leads/${leadId}`);
+      if (res.ok) {
+        const { lead } = await res.json();
+        setLead(lead);
+        setNotes(lead.notes || "");
       }
       setLoading(false);
     }
@@ -52,8 +50,12 @@ export default function LeadDetailPage() {
   async function updateStatus(status: Lead["status"]) {
     if (!lead) return;
     setStatusOpen(false);
-    const { error } = await supabase.from("leads").update({ status }).eq("id", leadId);
-    if (!error) {
+    const res = await fetch(`/api/leads/${leadId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    if (res.ok) {
       setLead((prev) => (prev ? { ...prev, status } : null));
       toast.success("Status updated");
     }
@@ -61,7 +63,11 @@ export default function LeadDetailPage() {
 
   async function saveNotes() {
     setSavingNotes(true);
-    await supabase.from("leads").update({ notes }).eq("id", leadId);
+    await fetch(`/api/leads/${leadId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ notes }),
+    });
     setSavingNotes(false);
     toast.success("Notes saved");
   }
