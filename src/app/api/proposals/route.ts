@@ -1,9 +1,11 @@
 
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateProposal } from "@/lib/claude";
 import { intakeFormSchema } from "@/lib/validations";
 
+export async function GET(req: NextRequest) {
   try {
     // TODO: Replace with real user auth
     const userId = "1";
@@ -17,6 +19,7 @@ import { intakeFormSchema } from "@/lib/validations";
   }
 }
 
+export async function POST(req: NextRequest) {
   try {
     // TODO: Replace with real user auth
     const userId = "1";
@@ -57,7 +60,7 @@ import { intakeFormSchema } from "@/lib/validations";
         budgetRange,
         timelineWeeks,
         additionalContext: additionalContext || null,
-        content,
+        content: content as any, // Ensure compatibility with Prisma Json field
         status: "draft",
       },
     });

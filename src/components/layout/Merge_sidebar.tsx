@@ -1,7 +1,8 @@
+import { createClient } from '@/lib/supabase/server'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -56,7 +57,7 @@ export function Sidebar({ onClose }: SidebarProps) {
         {navItems.map((item) => {
           const active =
             pathname === item.href ||
-            (item.href !== "/dashboard" && pathname.startsWith(item.href));
+            (item.href !== "/dashboard" && pathname && pathname.startsWith(item.href));
           return (
             <Link
               key={item.href}

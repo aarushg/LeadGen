@@ -21,7 +21,7 @@ export function MobileNav() {
         {TABS.map((tab) => {
           const active =
             pathname === tab.href ||
-            (tab.href !== "/dashboard" && pathname.startsWith(tab.href));
+            (tab.href !== "/dashboard" && pathname && pathname.startsWith(tab.href));
           return (
             <Link
               key={tab.href}

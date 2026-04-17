@@ -25,7 +25,8 @@ const STATUSES = [
 ] as const;
 
 export default function LeadDetailPage() {
-  const { leadId } = useParams<{ leadId: string }>();
+  const params = useParams();
+  const leadId = (params as { leadId: string }).leadId;
   const router = useRouter();
   const [lead, setLead] = useState<Lead | null>(null);
   const [loading, setLoading] = useState(true);
