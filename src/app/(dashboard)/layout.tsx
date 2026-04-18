@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { MobileNav } from "@/components/layout/MobileNav";
+import { Sidebar } from "@/components/layout/sidebar";
+import { MobileNav } from "@/components/layout/mobilenav";
 import { Menu, Zap } from "lucide-react";
 import Link from "next/link";
 

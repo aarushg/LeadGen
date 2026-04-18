@@ -25,8 +25,8 @@ import type { ToolImplementation } from '@/lib/tool-implementations'
 import type { Tool } from '@/lib/db'
 
 export default function ToolDetailsPage() {
-  const params = useParams()
-  const id = params.id as string
+  const params = useParams() ?? {};
+  const id = (params as { id?: string }).id ?? "";
 
   const [tool, setTool] = useState<Tool | null>(null)
   const [implementation, setImplementation] = useState<ToolImplementation | null>(null)

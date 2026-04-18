@@ -19,21 +19,22 @@ import { formatDate, cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function ProposalDetailPage() {
-  const { proposalId } = useParams<{ proposalId: string }>();
+  const params = useParams();
+  const proposalId = (params as { proposalId: string }).proposalId;
   const router = useRouter();
   const [proposal, setProposal] = useState<Proposal | null>(null);
   const [loading, setLoading] = useState(true);
   const [statusOpen, setStatusOpen] = useState(false);
 
+
   useEffect(() => {
-    async function load() {
+    const load = async () => {
       setLoading(true);
       const res = await fetch(`/api/proposals/${proposalId}`);
-        const { proposal } = await res.json();
-        setProposal(proposal);
-      }
+      const { proposal } = await res.json();
+      setProposal(proposal);
       setLoading(false);
-    }
+    };
     load();
   }, [proposalId]);
 

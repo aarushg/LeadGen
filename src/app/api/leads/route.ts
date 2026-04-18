@@ -1,9 +1,11 @@
 
 
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { saveLeadSchema } from "@/lib/validations";
 
+export async function GET(req: NextRequest) {
   try {
     // TODO: Replace with real user auth
     const userId = "1";
@@ -31,6 +33,7 @@ import { saveLeadSchema } from "@/lib/validations";
   }
 }
 
+export async function POST(req: NextRequest) {
   try {
     // TODO: Replace with real user auth
     const userId = "1";
@@ -39,8 +42,12 @@ import { saveLeadSchema } from "@/lib/validations";
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
+    // Convert tags array to comma-separated string or null
+    const tags = Array.isArray(parsed.data.tags)
+      ? parsed.data.tags.join(",")
+      : parsed.data.tags ?? null;
     const lead = await prisma.lead.create({
-      data: { ...parsed.data, userId },
+      data: { ...parsed.data, userId, tags },
     });
     return NextResponse.json({ lead }, { status: 201 });
   } catch (err) {

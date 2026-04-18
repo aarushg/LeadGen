@@ -1,8 +1,10 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateOutreachMessage } from "@/lib/claude";
 import { outreachSchema } from "@/lib/validations";
 
+export async function POST(req: NextRequest) {
   try {
     // TODO: Replace with real user auth
     const userId = "1";
@@ -11,7 +13,16 @@ import { outreachSchema } from "@/lib/validations";
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-    const result = await generateOutreachMessage(parsed.data);
+    const result = await generateOutreachMessage({
+      leadProfile: parsed.data.researchSummary,
+      senderName: parsed.data.senderName,
+      senderCompany: parsed.data.senderCompany,
+      senderValueProp: parsed.data.senderValueProp,
+      tone: parsed.data.tone,
+      channel: parsed.data.channel,
+      contactName: parsed.data.contactName,
+      companyName: parsed.data.companyName,
+    });
     // If lead ID provided, update lead
     if (parsed.data.leadId) {
       await prisma.lead.update({
