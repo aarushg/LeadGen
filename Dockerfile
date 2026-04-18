@@ -8,7 +8,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
 COPY jsconfig.json ./
-COPY . .
+COPY next.config.ts ./
+COPY tsconfig.json ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY prisma ./prisma
+COPY src ./src
+COPY data ./data
+COPY scripts ./scripts
+COPY pages ./pages
 RUN npx prisma generate
 RUN npm run build
 
