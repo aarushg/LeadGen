@@ -47,7 +47,25 @@ Agencies are willing to pay **$1,000â€“$2,000** for a setup like this.
 
 ---
 
-### 4. AI-Powered Tools Library (Fully Implemented)
+### 4. Marketing Skills (AI Expert Chat Tools)
+8 deeply-prompted AI assistants, each built around a specific marketing discipline. Access from **Marketing Skills** in the sidebar at `/skills`.
+
+| Skill | Category | What it does |
+|---|---|---|
+| Cold Email Writer | Sales & Outreach | Writes peer-to-peer cold emails that get replies — subject lines, body, follow-up angles |
+| Copywriting | Content & Copy | Homepage, landing page, pricing page, and feature copy with headline and CTA variants |
+| SEO Audit | SEO & Discovery | Prioritized audit of any website — crawlability, on-page, content, authority |
+| Page CRO | Conversion Optimization | Analyzes any marketing page for conversion blockers, quick wins, and A/B test ideas |
+| Email Sequence Builder | Content & Copy | Full automated email flows — welcome, nurture, onboarding, re-engagement |
+| Social Content | Content & Copy | LinkedIn posts, Twitter/X threads, Instagram carousels, and content calendars |
+| Marketing Ideas | Strategy & Monetization | Tailored strategy ideas by stage, budget, and channel with implementation steps |
+| Competitor Analysis | Strategy & Monetization | Comparison pages, positioning gaps, competitive battlecards |
+
+Each skill has **starter prompts** shown on first open so you can get results immediately without knowing what to ask.
+
+---
+
+### 5. AI-Powered Tools Library (Fully Implemented)
 Integrated lead generation and marketing tools built directly into the app. Access from **Tools Library** in the sidebar.
 
 **âœ… Implemented Tools Library Coverage (23/23) + 1 Bonus Tool:**
@@ -317,6 +335,9 @@ These features would move LeadGen beyond lead generation into a fuller agency op
 - [x] Client notes field for printable report handoff
 - [x] Campaign metadata fields in lead research and CRM
 - [x] Paid lead reporting by campaign, ad set, quality, and estimated revenue
+- [x] Marketing Skills hub launched at `/skills` with 8 expert AI tools
+- [x] Individual skill chat pages at `/skills/[skillId]` with full conversation history
+- [x] Skills API route at `/api/skills/chat` connects each skill's system prompt to Claude
 
 ---
 

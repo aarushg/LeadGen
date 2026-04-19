@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot, ShieldCheck, Layers3, Factory
+  Zap, LayoutDashboard, Search, FileText, Users, Settings, Menu, X, LibraryBig, BarChart3, Lightbulb, Megaphone, BriefcaseBusiness, Bot, ShieldCheck, Layers3, Factory, Upload, Wand2
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/research", label: "Lead Research", icon: Search },
+  { href: "/import", label: "Import Leads", icon: Upload },
+  { href: "/skills", label: "Marketing Skills", icon: Wand2 },
   { href: "/dashboard/tools", label: "Tools Library", icon: LibraryBig },
   { href: "/dashboard/tools/analytics", label: "Tool Analytics", icon: BarChart3 },
   { href: "/dashboard/reporting", label: "Reporting", icon: BarChart3 },

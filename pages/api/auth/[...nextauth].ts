@@ -1,44 +1,68 @@
-import NextAuth from "next-auth";
+import NextAuth, { type AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
-export default NextAuth({
+const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "jsmith@example.com" },
-        password: { label: "Password", type: "password" }
+        email: { label: "Email", type: "text", placeholder: "you@example.com" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Accept demo admin credentials
-        const demoAdmins = [
-          { id: 'admin-1', email: 'admin@dreamcatcher.app', password: 'admin', name: 'Admin User' },
-          { id: 'admin-2', email: 'admin', password: 'admin', name: 'Admin User' },
+        if (!credentials?.email || !credentials?.password) return null;
+
+        // ── Real DB users ────────────────────────────────────────────────────
+        const dbUser = await prisma.user.findUnique({
+          where: { email: credentials.email.toLowerCase() },
+        });
+
+        if (dbUser) {
+          const valid = await bcrypt.compare(credentials.password, dbUser.password);
+          if (valid) {
+            return { id: dbUser.id, name: dbUser.name ?? dbUser.email, email: dbUser.email };
+          }
+          return null;
+        }
+
+        // ── Demo / admin fallback ────────────────────────────────────────────
+        const demoAccounts = [
+          { id: "admin-1", email: "admin@leadgen.app", password: "admin", name: "Admin" },
+          { id: "admin-2", email: "admin", password: "admin", name: "Admin" },
+          { id: "demo-1", email: "demo@leadgen.local", password: "password", name: "Demo User" },
         ];
-        const match = demoAdmins.find(
+        const demo = demoAccounts.find(
           (u) =>
-            credentials?.email?.toLowerCase() === u.email.toLowerCase() &&
-            credentials?.password === u.password
+            credentials.email.toLowerCase() === u.email.toLowerCase() &&
+            credentials.password === u.password
         );
-        if (match) {
-          return { id: match.id, name: match.name, email: match.email };
+        if (demo) {
+          return { id: demo.id, name: demo.name, email: demo.email };
         }
-        // Also allow the old demo user for compatibility
-        if (
-          credentials?.email === "demo@leadgen.local" &&
-          credentials?.password === "password"
-        ) {
-          return { id: "1", name: "Demo User", email: "demo@leadgen.local" };
-        }
+
         return null;
-      }
-    })
+      },
+    }),
   ],
-  session: {
-    strategy: "jwt"
+  session: { strategy: "jwt" },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) (session.user as { id?: string }).id = token.id as string;
+      return session;
+    },
   },
   pages: {
     signIn: "/login",
-    signOut: "/logout"
-  }
-});
+    signOut: "/logout",
+  },
+  secret: process.env.NEXTAUTH_SECRET || "leadgen-dev-secret-change-in-production",
+};
+
+export default NextAuth(authOptions);
+export { authOptions };
