@@ -202,7 +202,7 @@ export async function POST(req: NextRequest) {
         status: mapPriority(row.leadPriority),
         tags: [sheetName].filter(Boolean).join(","),
       })),
-      skipDuplicates: true,
+      // skipDuplicates removed: not supported by current Prisma version
     });
 
     return NextResponse.json({
