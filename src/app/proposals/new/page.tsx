@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader2, Save, Printer, Bot, Sparkles } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -46,6 +46,7 @@ interface ClientAccount {
 
 export default function NewProposalPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [generating, setGenerating] = useState(false)
   const [saving, setSaving] = useState(false)
   const [proposal, setProposal] = useState<ProposalContent | null>(null)
@@ -79,6 +80,17 @@ export default function NewProposalPage() {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  // Pre-fill from URL params (e.g. when navigating from CRM)
+  useEffect(() => {
+    if (!searchParams) return
+    const clientName = searchParams.get('clientName')
+    const clientCompany = searchParams.get('clientCompany')
+    const clientEmail = searchParams.get('clientEmail')
+    if (clientName) setValue('clientName', clientName)
+    if (clientCompany) setValue('clientCompany', clientCompany)
+    if (clientEmail) setValue('clientEmail', clientEmail)
+  }, [searchParams, setValue])
 
   async function onSubmit(data: FormData) {
     setGenerating(true)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, Send, Loader2, Bot, User, RotateCcw,
@@ -23,14 +23,31 @@ interface Message {
 export default function SkillChatPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const skillId = (params?.skillId ?? "") as string;
   const skill = getSkill(skillId);
+  const prefill = searchParams?.get("prefill") ?? "";
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [provider, setProvider] = useState<"claude" | "ollama">("claude");
+  const [ollamaModels, setOllamaModels] = useState<string[]>([]);
+  const [ollamaModel, setOllamaModel] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    fetch("/api/ollama/status")
+      .then(r => r.json())
+      .then(data => {
+        if (data.running && data.models?.length) {
+          setOllamaModels(data.models);
+          setOllamaModel(data.models[0]);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,7 +73,12 @@ export default function SkillChatPage() {
       const res = await fetch("/api/skills/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ skillId: skill!.id, messages: updated }),
+        body: JSON.stringify({
+          skillId: skill!.id,
+          messages: updated,
+          provider,
+          ollamaModel: provider === "ollama" ? ollamaModel : undefined,
+        }),
       });
 
       const data = await res.json();
@@ -92,6 +114,37 @@ export default function SkillChatPage() {
           <h1 className="font-semibold text-sm truncate">{skill.label}</h1>
           <p className="text-xs text-muted-foreground truncate">{skill.category}</p>
         </div>
+        {/* AI provider toggle */}
+        <div className="flex items-center gap-1 bg-secondary rounded-lg p-0.5 text-xs">
+          <button
+            onClick={() => setProvider("claude")}
+            className={cn("px-2.5 py-1 rounded-md font-medium transition-colors",
+              provider === "claude" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
+            )}
+          >
+            Claude
+          </button>
+          <button
+            onClick={() => { if (ollamaModels.length) setProvider("ollama"); }}
+            disabled={!ollamaModels.length}
+            title={ollamaModels.length ? "Use Ollama" : "Start Ollama to enable"}
+            className={cn("px-2.5 py-1 rounded-md font-medium transition-colors disabled:opacity-40",
+              provider === "ollama" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
+            )}
+          >
+            <Bot className="w-3 h-3 inline mr-1" />
+            Local
+          </button>
+        </div>
+        {provider === "ollama" && ollamaModels.length > 1 && (
+          <select
+            value={ollamaModel}
+            onChange={e => setOllamaModel(e.target.value)}
+            className="text-xs bg-secondary rounded-lg px-2 py-1 border-none outline-none"
+          >
+            {ollamaModels.map(m => <option key={m} value={m}>{m}</option>)}
+          </select>
+        )}
         {messages.length > 0 && (
           <button
             onClick={() => setMessages([])}
@@ -116,9 +169,23 @@ export default function SkillChatPage() {
               <p className="text-sm text-muted-foreground max-w-sm">{skill.description}</p>
             </div>
 
+            {/* Lead context prefill */}
+            {prefill && (
+              <div className="w-full max-w-lg bg-primary/5 border border-primary/20 rounded-xl p-4 text-left space-y-2">
+                <p className="text-xs font-medium text-primary uppercase tracking-wide">Lead context loaded</p>
+                <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-sans">{prefill}</pre>
+                <button
+                  onClick={() => sendMessage(`Here is my lead:\n\n${prefill}\n\nPlease help me with this lead using your expertise.`)}
+                  className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                >
+                  Start with this lead
+                </button>
+              </div>
+            )}
+
             {/* Starter prompts */}
             <div className="w-full max-w-lg space-y-2">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Try asking</p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or try asking</p>
               {skill.starterPrompts.map((prompt) => (
                 <button
                   key={prompt}

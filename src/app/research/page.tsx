@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Loader2, Save, Copy, Check, Bot, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -30,11 +30,12 @@ interface ClientAccount {
 
 export default function ResearchPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [form, setForm] = useState({
     clientId: '',
-    company: '',
-    website: '',
-    contactName: '',
+    company: searchParams?.get('company') ?? '',
+    website: searchParams?.get('website') ?? '',
+    contactName: searchParams?.get('contactName') ?? '',
     contactTitle: '',
     linkedinUrl: '',
     leadSource: '',

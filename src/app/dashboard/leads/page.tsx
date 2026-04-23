@@ -1,96 +1,70 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Trash2, ChevronDown, Sparkles, Loader2, Copy, Check, RefreshCw } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import {
+  Trash2, ChevronDown, Sparkles, Loader2, Copy, Check,
+  RefreshCw, Search, FileText, Mail, ExternalLink, Phone, Globe,
+  MapPin, Star, Wand2,
+} from 'lucide-react'
 import { toast } from 'sonner'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { formatRelativeDate } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+
+const SKILL_SHORTCUTS = [
+  { id: 'cold-email', label: 'Cold Email' },
+  { id: 'seo-audit', label: 'SEO Audit' },
+  { id: 'competitor-analysis', label: 'Competitor Analysis' },
+  { id: 'marketing-ideas', label: 'Marketing Ideas' },
+]
 
 type LeadStatus = 'new' | 'researched' | 'contacted' | 'replied' | 'qualified' | 'closed_won' | 'closed_lost'
 
 interface Lead {
   id: string
-  full_name: string | null
   company: string
-  title: string | null
+  fullName: string | null
   email: string | null
-  status: LeadStatus
+  phone: string | null
+  companyWebsite: string | null
+  city: string | null
+  state: string | null
   notes: string | null
-  outreach_message: string | null
-  lead_source?: string | null
-  acquisition_channel?: string | null
-  campaign_name?: string | null
-  ad_set_name?: string | null
-  lead_quality?: 'high' | 'medium' | 'low' | null
-  estimated_revenue?: number | null
-  created_at: string
-  industry?: string | null
-}
-
-interface LeadScore {
-  score: number
-  tier: 'hot' | 'warm' | 'cold'
-  reasoning: string
-  nextAction: string
+  outreachMessage: string | null
+  status: LeadStatus
+  createdAt: string
 }
 
 const STATUS_OPTIONS: LeadStatus[] = ['new', 'researched', 'contacted', 'replied', 'qualified', 'closed_won', 'closed_lost']
 
-const STATUS_VARIANT: Record<LeadStatus, 'default' | 'secondary' | 'success' | 'warning' | 'destructive' | 'outline'> = {
-  new: 'secondary',
-  researched: 'outline',
-  contacted: 'default',
-  replied: 'success',
-  qualified: 'warning',
-  closed_won: 'success',
-  closed_lost: 'destructive',
-}
-
-const TIER_COLORS: Record<string, string> = {
-  hot: 'text-red-600 bg-red-50 border-red-200',
-  warm: 'text-orange-600 bg-orange-50 border-orange-200',
-  cold: 'text-blue-600 bg-blue-50 border-blue-200',
+const STATUS_STYLES: Record<LeadStatus, string> = {
+  new: 'bg-secondary text-muted-foreground',
+  researched: 'bg-blue-500/15 text-blue-400',
+  contacted: 'bg-amber-500/15 text-amber-400',
+  replied: 'bg-purple-500/15 text-purple-400',
+  qualified: 'bg-emerald-500/15 text-emerald-400',
+  closed_won: 'bg-emerald-600/20 text-emerald-300',
+  closed_lost: 'bg-destructive/15 text-destructive',
 }
 
 export default function LeadsPage() {
+  const router = useRouter()
   const [leads, setLeads] = useState<Lead[]>([])
   const [filter, setFilter] = useState<LeadStatus | 'all'>('all')
+  const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<Lead | null>(null)
   const [loading, setLoading] = useState(true)
+  const [statusOpen, setStatusOpen] = useState(false)
 
-  // AI state
-  const [ollamaModel, setOllamaModel] = useState<string>('')
-  const [scoring, setScoring] = useState(false)
-  const [score, setScore] = useState<LeadScore | null>(null)
-  const [draftingOutreach, setDraftingOutreach] = useState(false)
-  const [draftedMessage, setDraftedMessage] = useState('')
-  const [outreachChannel, setOutreachChannel] = useState<'email' | 'linkedin' | 'twitter'>('email')
-  const [outreachTone, setOutreachTone] = useState<'professional' | 'casual' | 'direct' | 'warm'>('professional')
+  // Outreach draft state
+  const [drafting, setDrafting] = useState(false)
+  const [draft, setDraft] = useState('')
+  const [channel, setChannel] = useState<'email' | 'linkedin' | 'twitter'>('email')
+  const [tone, setTone] = useState<'professional' | 'casual' | 'direct' | 'warm'>('professional')
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    fetch('/api/ollama/status')
-      .then(r => r.json())
-      .then(data => { if (data.models?.length) setOllamaModel(data.models[0]) })
-      .catch(() => {})
-  }, [])
-
   async function fetchLeads() {
+    setLoading(true)
     const url = filter === 'all' ? '/api/leads' : `/api/leads?status=${filter}`
     const res = await fetch(url)
     if (res.ok) {
@@ -102,11 +76,12 @@ export default function LeadsPage() {
 
   useEffect(() => { fetchLeads() }, [filter])
 
-  function openLead(lead: Lead) {
-    setSelected(lead)
-    setScore(null)
-    setDraftedMessage('')
-  }
+  const visible = leads.filter(l =>
+    !search ||
+    l.company.toLowerCase().includes(search.toLowerCase()) ||
+    (l.email ?? '').toLowerCase().includes(search.toLowerCase()) ||
+    (l.city ?? '').toLowerCase().includes(search.toLowerCase())
+  )
 
   async function updateStatus(id: string, status: LeadStatus) {
     const res = await fetch(`/api/leads/${id}`, {
@@ -130,326 +105,370 @@ export default function LeadsPage() {
     }
   }
 
-  async function scoreLead() {
-    if (!selected || !ollamaModel) return
-    setScoring(true)
-    setScore(null)
-    try {
-      const res = await fetch('/api/ollama/score-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: selected, model: ollamaModel }),
-      })
-      const data = await res.json()
-      if (!res.ok) { toast.error(data.error ?? 'Scoring failed'); return }
-      setScore(data)
-    } catch {
-      toast.error('Could not reach Ollama')
-    } finally {
-      setScoring(false)
-    }
-  }
-
   async function draftOutreach() {
-    if (!selected || !ollamaModel) return
-    setDraftingOutreach(true)
-    setDraftedMessage('')
+    if (!selected) return
+    setDrafting(true)
+    setDraft('')
     try {
-      const res = await fetch('/api/ollama/draft-outreach', {
+      const res = await fetch('/api/skills/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: selected, channel: outreachChannel, tone: outreachTone, model: ollamaModel }),
+        body: JSON.stringify({
+          skillId: 'cold-email',
+          messages: [{
+            role: 'user',
+            content: `Write a ${tone} outreach ${channel === 'email' ? 'email' : channel + ' message'} for this lead:
+
+Company: ${selected.company}
+${selected.fullName ? `Contact: ${selected.fullName}` : ''}
+${selected.email ? `Email: ${selected.email}` : ''}
+${selected.city || selected.state ? `Location: ${[selected.city, selected.state].filter(Boolean).join(', ')}` : ''}
+${selected.notes ? `Context: ${selected.notes}` : ''}
+
+Write the outreach message now. Be concise and specific.`,
+          }],
+        }),
       })
       const data = await res.json()
-      if (!res.ok) { toast.error(data.error ?? 'Draft failed'); return }
-      setDraftedMessage(data.message)
+      if (!res.ok) throw new Error(data.error)
+      setDraft(data.message)
+      // Save outreach message back to the lead
+      await fetch(`/api/leads/${selected.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ outreachMessage: data.message }),
+      })
     } catch {
-      toast.error('Could not reach Ollama')
+      toast.error('Failed to draft outreach')
     } finally {
-      setDraftingOutreach(false)
+      setDrafting(false)
     }
   }
 
-  async function copyText(text: string) {
-    await navigator.clipboard.writeText(text)
+  async function copyDraft() {
+    await navigator.clipboard.writeText(draft)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+    toast.success('Copied to clipboard')
   }
 
-  const filters: Array<LeadStatus | 'all'> = ['all', ...STATUS_OPTIONS]
+  function openResearch(lead: Lead) {
+    const params = new URLSearchParams({
+      company: lead.company,
+      ...(lead.companyWebsite ? { website: lead.companyWebsite } : {}),
+      ...(lead.fullName ? { contactName: lead.fullName } : {}),
+      ...(lead.email ? { email: lead.email } : {}),
+    })
+    router.push(`/research?${params.toString()}`)
+  }
+
+  function openProposal(lead: Lead) {
+    const params = new URLSearchParams({
+      clientCompany: lead.company,
+      ...(lead.fullName ? { clientName: lead.fullName } : {}),
+      ...(lead.email ? { clientEmail: lead.email } : {}),
+    })
+    router.push(`/proposals/new?${params.toString()}`)
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">CRM</h1>
-        <p className="text-muted-foreground">Manage your lead pipeline</p>
-      </div>
-
-      {/* Filter */}
-      <div className="flex flex-wrap gap-2">
-        {filters.map(f => (
-          <Button
-            key={f}
-            size="sm"
-            variant={filter === f ? 'default' : 'outline'}
-            onClick={() => setFilter(f)}
-          >
-            {f === 'all' ? 'All' : f.replace('_', ' ')}
-          </Button>
-        ))}
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Leads {leads.length > 0 && `(${leads.length})`}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="py-8 text-center text-muted-foreground">Loading...</p>
-          ) : leads.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">No leads found.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="pb-3 pr-4 font-medium">Name</th>
-                    <th className="pb-3 pr-4 font-medium">Company</th>
-                    <th className="pb-3 pr-4 font-medium">Status</th>
-                    <th className="pb-3 pr-4 font-medium hidden sm:table-cell">Added</th>
-                    <th className="pb-3 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {leads.map(lead => (
-                    <tr
-                      key={lead.id}
-                      className="cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => openLead(lead)}
-                    >
-                      <td className="py-3 pr-4 font-medium">{lead.full_name || '—'}</td>
-                      <td className="py-3 pr-4 text-muted-foreground">{lead.company}</td>
-                      <td className="py-3 pr-4" onClick={e => e.stopPropagation()}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button className="flex items-center gap-1">
-                              <Badge variant={STATUS_VARIANT[lead.status]}>
-                                {lead.status.replace('_', ' ')}
-                              </Badge>
-                              <ChevronDown className="h-3 w-3 text-muted-foreground" />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            {STATUS_OPTIONS.map(s => (
-                              <DropdownMenuItem key={s} onClick={() => updateStatus(lead.id, s)}>
-                                {s.replace('_', ' ')}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                      <td className="py-3 pr-4 text-muted-foreground hidden sm:table-cell">
-                        {formatRelativeDate(lead.created_at)}
-                      </td>
-                      <td className="py-3" onClick={e => e.stopPropagation()}>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                          onClick={() => deleteLead(lead.id)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Lead detail dialog */}
-      <Dialog open={!!selected} onOpenChange={open => !open && setSelected(null)}>
-        {selected && (
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{selected.full_name || selected.company}</DialogTitle>
-              <DialogDescription>{selected.title} — {selected.company}</DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4 text-sm">
-              {/* Basic info */}
-              <div className="grid grid-cols-2 gap-2">
-                {selected.email && (
-                  <div><span className="font-medium">Email: </span>{selected.email}</div>
+    <div className="flex h-full overflow-hidden">
+      {/* Lead list */}
+      <div className={cn('flex flex-col border-r border-border', selected ? 'hidden md:flex md:w-80 lg:w-96 flex-shrink-0' : 'flex-1')}>
+        {/* Header */}
+        <div className="px-4 py-4 border-b border-border space-y-3 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-bold">CRM</h1>
+            <span className="text-xs text-muted-foreground">{visible.length} leads</span>
+          </div>
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search leads..."
+            className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/60"
+          />
+          <div className="flex gap-1.5 flex-wrap">
+            {(['all', ...STATUS_OPTIONS] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={cn(
+                  'px-2.5 py-1 rounded-full text-xs font-medium transition-colors',
+                  filter === f
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground'
                 )}
-                <div>
-                  <span className="font-medium">Status: </span>
-                  <Badge variant={STATUS_VARIANT[selected.status]}>{selected.status.replace('_', ' ')}</Badge>
+              >
+                {f === 'all' ? 'All' : f.replace('_', ' ')}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* List */}
+        <div className="flex-1 overflow-y-auto">
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : visible.length === 0 ? (
+            <div className="text-center py-16 px-4">
+              <p className="text-muted-foreground text-sm">No leads found.</p>
+              <p className="text-xs text-muted-foreground mt-1">Import leads from the sidebar to get started.</p>
+            </div>
+          ) : (
+            visible.map(lead => (
+              <button
+                key={lead.id}
+                onClick={() => { setSelected(lead); setDraft(''); setStatusOpen(false) }}
+                className={cn(
+                  'w-full text-left px-4 py-3 border-b border-border/50 hover:bg-secondary/50 transition-colors',
+                  selected?.id === lead.id && 'bg-primary/5 border-l-2 border-l-primary'
+                )}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{lead.company}</p>
+                    {lead.fullName && <p className="text-xs text-muted-foreground truncate">{lead.fullName}</p>}
+                    {(lead.city || lead.state) && (
+                      <p className="text-xs text-muted-foreground truncate">
+                        {[lead.city, lead.state].filter(Boolean).join(', ')}
+                      </p>
+                    )}
+                  </div>
+                  <span className={cn('px-2 py-0.5 rounded-full text-[10px] font-medium flex-shrink-0', STATUS_STYLES[lead.status])}>
+                    {lead.status.replace('_', ' ')}
+                  </span>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Lead detail panel */}
+      {selected ? (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Detail header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSelected(null)}
+                className="md:hidden p-1.5 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
+              >
+                ←
+              </button>
+              <div>
+                <h2 className="font-bold">{selected.company}</h2>
+                {selected.fullName && <p className="text-sm text-muted-foreground">{selected.fullName}</p>}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Status picker */}
+              <div className="relative">
+                <button
+                  onClick={() => setStatusOpen(!statusOpen)}
+                  className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium', STATUS_STYLES[selected.status])}
+                >
+                  {selected.status.replace('_', ' ')}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {statusOpen && (
+                  <div className="absolute right-0 top-8 z-10 w-40 bg-card border border-border rounded-xl shadow-lg py-1 overflow-hidden">
+                    {STATUS_OPTIONS.map(s => (
+                      <button
+                        key={s}
+                        onClick={() => { updateStatus(selected.id, s); setStatusOpen(false) }}
+                        className="w-full text-left px-3 py-2 text-xs hover:bg-secondary transition-colors capitalize"
+                      >
+                        {s.replace('_', ' ')}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => deleteLead(selected.id)}
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Detail content */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-5">
+            {/* Contact info */}
+            <div className="glass rounded-xl p-4 space-y-2.5">
+              {selected.email && (
+                <div className="flex items-center gap-2.5 text-sm">
+                  <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <a href={`mailto:${selected.email}`} className="text-primary hover:underline truncate">{selected.email}</a>
+                </div>
+              )}
+              {selected.phone && (
+                <div className="flex items-center gap-2.5 text-sm">
+                  <Phone className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <span>{selected.phone}</span>
+                </div>
+              )}
+              {selected.companyWebsite && (
+                <div className="flex items-center gap-2.5 text-sm">
+                  <Globe className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <a href={selected.companyWebsite.startsWith('http') ? selected.companyWebsite : `https://${selected.companyWebsite}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="text-primary hover:underline truncate flex items-center gap-1">
+                    {selected.companyWebsite}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              )}
+              {(selected.city || selected.state) && (
+                <div className="flex items-center gap-2.5 text-sm">
+                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <span className="text-muted-foreground">{[selected.city, selected.state].filter(Boolean).join(', ')}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Notes */}
+            {selected.notes && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Notes</p>
+                <p className="text-sm text-muted-foreground leading-relaxed bg-secondary/50 rounded-xl p-3">
+                  {selected.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => openResearch(selected)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                Research Lead
+              </button>
+              <button
+                onClick={() => openProposal(selected)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border text-sm font-medium hover:border-primary/40 hover:bg-secondary/50 transition-colors"
+              >
+                <FileText className="w-4 h-4" />
+                Generate Proposal
+              </button>
+            </div>
+
+            {/* Use with Marketing Skills */}
+            <div className="glass rounded-xl p-4 space-y-2.5">
+              <p className="text-sm font-semibold flex items-center gap-1.5">
+                <Wand2 className="w-4 h-4 text-primary" />
+                Use with Marketing Skills
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {SKILL_SHORTCUTS.map(skill => {
+                  const params = new URLSearchParams({
+                    prefill: `Company: ${selected.company}${selected.companyWebsite ? `\nWebsite: ${selected.companyWebsite}` : ''}${selected.email ? `\nEmail: ${selected.email}` : ''}${selected.notes ? `\nContext: ${selected.notes}` : ''}`,
+                  })
+                  return (
+                    <Link
+                      key={skill.id}
+                      href={`/skills/${skill.id}?${params.toString()}`}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border hover:border-primary/40 hover:bg-secondary/50 text-xs font-medium transition-colors"
+                    >
+                      <Wand2 className="w-3 h-3 text-muted-foreground" />
+                      {skill.label}
+                    </Link>
+                  )
+                })}
+              </div>
+              <Link
+                href="/skills"
+                className="text-xs text-primary hover:underline"
+              >
+                Browse all 8 skills →
+              </Link>
+            </div>
+
+            {/* AI Outreach drafting */}
+            <div className="glass rounded-xl p-4 space-y-3">
+              <p className="text-sm font-semibold flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-primary" />
+                Draft Outreach with Claude
+              </p>
+
+              <div className="flex gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-muted-foreground">Channel:</span>
+                  {(['email', 'linkedin', 'twitter'] as const).map(ch => (
+                    <button key={ch} onClick={() => setChannel(ch)}
+                      className={cn('px-2 py-0.5 rounded-full border text-xs capitalize transition-colors',
+                        channel === ch ? 'bg-primary text-primary-foreground border-primary' : 'border-border hover:bg-secondary'
+                      )}>
+                      {ch}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-muted-foreground">Tone:</span>
+                  {(['professional', 'casual', 'direct', 'warm'] as const).map(tn => (
+                    <button key={tn} onClick={() => setTone(tn)}
+                      className={cn('px-2 py-0.5 rounded-full border text-xs capitalize transition-colors',
+                        tone === tn ? 'bg-primary text-primary-foreground border-primary' : 'border-border hover:bg-secondary'
+                      )}>
+                      {tn}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {selected.outreach_message && (
-                <div>
-                  <p className="font-medium mb-1">Outreach message:</p>
-                  <p className="text-muted-foreground whitespace-pre-wrap rounded-md bg-muted p-3 text-xs">
-                    {selected.outreach_message}
-                  </p>
-                </div>
-              )}
-              {selected.notes && (
-                <div>
-                  <p className="font-medium mb-1">Notes:</p>
-                  <p className="text-muted-foreground">{selected.notes}</p>
-                </div>
-              )}
-              {(selected.lead_source || selected.acquisition_channel || selected.campaign_name || selected.ad_set_name) && (
-                <div className="space-y-1">
-                  <p className="font-medium">Campaign tracking</p>
-                  {selected.lead_source && <div><span className="font-medium">Lead source: </span>{selected.lead_source}</div>}
-                  {selected.acquisition_channel && <div><span className="font-medium">Channel: </span>{selected.acquisition_channel}</div>}
-                  {selected.campaign_name && <div><span className="font-medium">Campaign: </span>{selected.campaign_name}</div>}
-                  {selected.ad_set_name && <div><span className="font-medium">Ad set: </span>{selected.ad_set_name}</div>}
-                  {selected.lead_quality && <div><span className="font-medium">Lead quality: </span>{selected.lead_quality}</div>}
-                  {typeof selected.estimated_revenue === 'number' && (
-                    <div><span className="font-medium">Estimated revenue: </span>${selected.estimated_revenue.toLocaleString()}</div>
-                  )}
-                </div>
-              )}
-
-              {/* AI Lead Scoring */}
-              {ollamaModel && (
-                <div className="border rounded-lg p-4 space-y-3 bg-muted/30">
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium flex items-center gap-1.5">
-                      <Sparkles className="h-4 w-4 text-primary" />
-                      AI Lead Score
-                    </p>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={scoreLead}
-                      disabled={scoring}
-                      className="gap-1.5 h-7"
-                    >
-                      {scoring ? (
-                        <><Loader2 className="h-3 w-3 animate-spin" /> Scoring...</>
-                      ) : score ? (
-                        <><RefreshCw className="h-3 w-3" /> Re-score</>
-                      ) : (
-                        <><Sparkles className="h-3 w-3" /> Score lead</>
-                      )}
-                    </Button>
-                  </div>
-
-                  {score && (
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-2xl font-bold">{score.score}</span>
-                          <span className="text-muted-foreground text-xs">/10</span>
-                        </div>
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border capitalize ${TIER_COLORS[score.tier] ?? ''}`}>
-                          {score.tier}
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground">{score.reasoning}</p>
-                      <div className="rounded-md bg-primary/5 border border-primary/10 px-3 py-2">
-                        <p className="text-xs font-medium text-primary">Recommended next step</p>
-                        <p className="text-xs mt-0.5">{score.nextAction}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* AI Outreach Drafting */}
-              {ollamaModel && (
-                <div className="border rounded-lg p-4 space-y-3 bg-muted/30">
-                  <p className="font-medium flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    Draft Outreach with AI
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    <div className="flex items-center gap-1.5 text-xs">
-                      <span className="text-muted-foreground">Channel:</span>
-                      {(['email', 'linkedin', 'twitter'] as const).map(ch => (
-                        <button
-                          key={ch}
-                          onClick={() => setOutreachChannel(ch)}
-                          className={`px-2 py-0.5 rounded-full border text-xs capitalize transition-colors ${outreachChannel === ch ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
-                        >
-                          {ch}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs">
-                      <span className="text-muted-foreground">Tone:</span>
-                      {(['professional', 'casual', 'direct', 'warm'] as const).map(tn => (
-                        <button
-                          key={tn}
-                          onClick={() => setOutreachTone(tn)}
-                          className={`px-2 py-0.5 rounded-full border text-xs capitalize transition-colors ${outreachTone === tn ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'}`}
-                        >
-                          {tn}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={draftOutreach}
-                    disabled={draftingOutreach}
-                    className="gap-1.5 h-7"
-                  >
-                    {draftingOutreach ? (
-                      <><Loader2 className="h-3 w-3 animate-spin" /> Drafting...</>
-                    ) : draftedMessage ? (
-                      <><RefreshCw className="h-3 w-3" /> Redraft</>
-                    ) : (
-                      <><Sparkles className="h-3 w-3" /> Draft message</>
-                    )}
-                  </Button>
-                  {draftedMessage && (
-                    <div className="relative">
-                      <p className="text-xs whitespace-pre-wrap rounded-md bg-background border p-3 pr-8 leading-relaxed">
-                        {draftedMessage}
-                      </p>
-                      <button
-                        onClick={() => copyText(draftedMessage)}
-                        className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
-                        title="Copy"
-                      >
-                        {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {!ollamaModel && (
-                <p className="text-xs text-muted-foreground border rounded-lg p-3 bg-muted/30">
-                  Start Ollama locally to enable AI lead scoring and outreach drafting.
-                </p>
-              )}
-            </div>
-
-            <div className="flex justify-end gap-2 pt-2">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => deleteLead(selected.id)}
+              <button
+                onClick={draftOutreach}
+                disabled={drafting}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary/40 transition-colors disabled:opacity-60"
               >
-                <Trash2 className="h-4 w-4 mr-1" />
-                Delete
-              </Button>
+                {drafting
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Drafting...</>
+                  : draft
+                    ? <><RefreshCw className="w-4 h-4" /> Redraft</>
+                    : <><Sparkles className="w-4 h-4" /> Draft message</>
+                }
+              </button>
+
+              {draft && (
+                <div className="relative">
+                  <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed bg-secondary/60 rounded-lg p-3 pr-8">
+                    {draft}
+                  </pre>
+                  <button
+                    onClick={copyDraft}
+                    className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              )}
             </div>
-          </DialogContent>
-        )}
-      </Dialog>
+
+            {/* Saved outreach message */}
+            {selected.outreachMessage && !draft && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Saved Outreach</p>
+                <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed bg-secondary/50 rounded-xl p-3">
+                  {selected.outreachMessage}
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="hidden md:flex flex-1 items-center justify-center text-center p-8">
+          <div>
+            <Star className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
+            <p className="text-muted-foreground text-sm">Select a lead to view details</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

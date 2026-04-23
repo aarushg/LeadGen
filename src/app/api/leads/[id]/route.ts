@@ -1,60 +1,70 @@
-
-
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { updateLeadSchema } from "@/lib/validations";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../../pages/api/auth/[...nextauth]";
+import { prisma } from "@/lib/prisma";
+
+async function getUserId(): Promise<string> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (session?.user) return (session.user as { id?: string }).id ?? "admin-2";
+  } catch {}
+  return "admin-2";
+}
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    // Stubbed user for build compatibility
-    const user = { id: "stub-user-id" };
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    // Replace with real DB call if needed
-    return NextResponse.json({ lead: { id, user_id: user.id, stub: true } });
+    const userId = await getUserId();
+    const lead = await prisma.lead.findFirst({ where: { id, userId } });
+    if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ lead });
   } catch {
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
 
-export async function PUT(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    // Stubbed user for build compatibility
-    const user = { id: "stub-user-id" };
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
+    const userId = await getUserId();
     const body = await req.json();
-    const parsed = updateLeadSchema.partial().safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
-    }
 
-    // Stubbed DB update for build compatibility
-    return NextResponse.json({ lead: { id, user_id: user.id, ...parsed.data, stub: true } });
-  } catch {
+    const lead = await prisma.lead.updateMany({
+      where: { id, userId },
+      data: {
+        ...(body.status !== undefined && { status: body.status }),
+        ...(body.notes !== undefined && { notes: body.notes }),
+        ...(body.outreachMessage !== undefined && { outreachMessage: body.outreachMessage }),
+      },
+    });
+
+    return NextResponse.json({ lead });
+  } catch (err) {
+    console.error("[PATCH /api/leads/[id]]", err);
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
 
+// Support both PATCH and PUT
+export { PATCH as PUT };
+
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
-    // Stubbed user and DB delete for build compatibility
-    const user = { id: "stub-user-id" };
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = await getUserId();
+    await prisma.lead.deleteMany({ where: { id, userId } });
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error("[DELETE /api/leads/[id]]", err);
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }

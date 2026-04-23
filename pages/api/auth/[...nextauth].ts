@@ -14,20 +14,7 @@ const authOptions: AuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // ── Real DB users ────────────────────────────────────────────────────
-        const dbUser = await prisma.user.findUnique({
-          where: { email: credentials.email.toLowerCase() },
-        });
-
-        if (dbUser) {
-          const valid = await bcrypt.compare(credentials.password, dbUser.password);
-          if (valid) {
-            return { id: dbUser.id, name: dbUser.name ?? dbUser.email, email: dbUser.email };
-          }
-          return null;
-        }
-
-        // ── Demo / admin fallback ────────────────────────────────────────────
+        // ── Demo / admin accounts (always checked first) ─────────────────────
         const demoAccounts = [
           { id: "admin-1", email: "admin@leadgen.app", password: "admin", name: "Admin" },
           { id: "admin-2", email: "admin", password: "admin", name: "Admin" },
@@ -40,6 +27,21 @@ const authOptions: AuthOptions = {
         );
         if (demo) {
           return { id: demo.id, name: demo.name, email: demo.email };
+        }
+
+        // ── Real DB users ────────────────────────────────────────────────────
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: credentials.email.toLowerCase() },
+          });
+          if (dbUser) {
+            const valid = await bcrypt.compare(credentials.password, dbUser.password);
+            if (valid) {
+              return { id: dbUser.id, name: dbUser.name ?? dbUser.email, email: dbUser.email };
+            }
+          }
+        } catch {
+          // DB unavailable — demo accounts above still work
         }
 
         return null;

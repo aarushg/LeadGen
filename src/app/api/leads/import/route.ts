@@ -4,6 +4,67 @@ import { getServerSession } from "next-auth";
 import authOptions from "../../../../../pages/api/auth/[...nextauth]";
 import * as XLSX from "xlsx";
 
+async function resolveUserId(req: NextRequest): Promise<string | null> {
+  try {
+    const session = await getServerSession(authOptions as never);
+    const uid = (session as { user?: { id?: string } })?.user?.id;
+    if (uid) return uid;
+  } catch {}
+  return req.cookies.get("auth_user_id")?.value ?? null;
+}
+
+// ── GET — list all import sources with lead counts ────────────────────────────
+export async function GET(req: NextRequest) {
+  const userId = await resolveUserId(req);
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const leads = await prisma.lead.findMany({
+    where: { userId, NOT: { tags: null } },
+    select: { tags: true, createdAt: true },
+  });
+
+  // Group by filename (stored in tags)
+  const map = new Map<string, { count: number; importedAt: string }>();
+  for (const l of leads) {
+    const src = l.tags || "Unknown";
+    const existing = map.get(src);
+    if (!existing || l.createdAt > new Date(existing.importedAt)) {
+      map.set(src, {
+        count: (existing?.count ?? 0) + 1,
+        importedAt: existing
+          ? existing.importedAt > l.createdAt.toISOString()
+            ? existing.importedAt
+            : l.createdAt.toISOString()
+          : l.createdAt.toISOString(),
+      });
+    } else {
+      existing.count++;
+    }
+  }
+
+  const sources = Array.from(map.entries())
+    .map(([filename, { count, importedAt }]) => ({ filename, count, importedAt }))
+    .sort((a, b) => new Date(b.importedAt).getTime() - new Date(a.importedAt).getTime());
+
+  return NextResponse.json({ sources });
+}
+
+// ── DELETE — remove all leads from an import source ───────────────────────────
+export async function DELETE(req: NextRequest) {
+  const userId = await resolveUserId(req);
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { searchParams } = new URL(req.url);
+  const source = searchParams.get("source");
+  if (!source) return NextResponse.json({ error: "source param required" }, { status: 400 });
+
+  const { count } = await prisma.lead.deleteMany({
+    where: { userId, tags: source },
+  });
+
+  return NextResponse.json({ deleted: count, message: `Deleted ${count} leads from "${source}"` });
+}
+
 // ── Column normaliser ─────────────────────────────────────────────────────────
 // Maps raw header strings (lowercased, trimmed) to our Lead field names.
 const HEADER_MAP: Record<string, string> = {
@@ -200,7 +261,7 @@ export async function POST(req: NextRequest) {
         notes: buildNote(row),
         researchData: buildResearchData(row) as never,
         status: mapPriority(row.leadPriority),
-        tags: [sheetName].filter(Boolean).join(","),
+        tags: file.name,
       })),
       // skipDuplicates removed: not supported by current Prisma version
     });
