@@ -6,6 +6,8 @@ services:
     container_name: leadgen-app
     ports:
       - "3001:3001"
+    volumes:
+      - ./prisma/dev.db:/app/prisma/dev.db
     env_file:
       - path: .env.local
         required: false

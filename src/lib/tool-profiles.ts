@@ -14,6 +14,7 @@ export type ToolCapability =
   | 'lead-sync'
   | 'referral-marketing'
   | 'account-based-marketing'
+  | 'web-scraping-platform'
 
 export interface ToolFieldDefinition {
   key: string
@@ -32,6 +33,30 @@ export interface ToolProfile {
 }
 
 const profileMap: Record<string, ToolProfile> = {
+  leadgenscrape: {
+    capability: 'web-scraping-platform',
+    recordType: 'page',
+    researchBasis: 'actor-based scraping, managed proxies, datasets, request queues, integrations, and AI delivery workflows',
+    modes: ['actor-planning', 'crawl-design', 'dataset-review'],
+    inputFields: [
+      { key: 'domain', label: 'Target Domain', required: false, example: 'example.com' },
+      { key: 'searchTerm', label: 'Extraction Goal', required: false, example: 'restaurants in Toronto' },
+      { key: 'company', label: 'Workflow Context', required: false, example: 'Lead enrichment for Acme' },
+    ],
+    outputFocus: ['crawl targets', 'data extraction opportunities', 'automation handoff actions'],
+  },
+  'apify platform': {
+    capability: 'web-scraping-platform',
+    recordType: 'page',
+    researchBasis: 'actor-based scraping, managed proxies, datasets, request queues, integrations, and AI delivery workflows',
+    modes: ['actor-planning', 'crawl-design', 'dataset-review'],
+    inputFields: [
+      { key: 'domain', label: 'Target Domain', required: false, example: 'example.com' },
+      { key: 'searchTerm', label: 'Extraction Goal', required: false, example: 'restaurants in Toronto' },
+      { key: 'company', label: 'Workflow Context', required: false, example: 'Lead enrichment for Acme' },
+    ],
+    outputFocus: ['crawl targets', 'data extraction opportunities', 'automation handoff actions'],
+  },
   'salesforce marketing cloud': {
     capability: 'marketing-automation',
     recordType: 'campaign',

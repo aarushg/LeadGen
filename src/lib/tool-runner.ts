@@ -380,6 +380,7 @@ function buildToolActions(profile: ToolProfile, totalFound: number): ToolContrac
     'lead-sync': ['Review sync sources', 'Map routing destinations', 'Confirm conversion handoff'],
     'referral-marketing': ['Review advocacy surfaces', 'Design referral trigger', 'Plan reward follow-up'],
     'account-based-marketing': ['Review target account list', 'Prioritize account signals', 'Plan coordinated outreach'],
+    'web-scraping-platform': ['Review highest-value crawl targets', 'Define extraction and storage flow', 'Route fresh data into downstream workflows'],
   }
 
   return (baseActionByCapability[profile.capability] ?? ['Review source-backed records', 'Prepare next step', 'Continue workflow'])

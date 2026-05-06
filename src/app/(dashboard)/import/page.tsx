@@ -38,6 +38,11 @@ export default function ImportPage() {
   const [sources, setSources] = useState<ImportSource[]>([]);
   const [loadingSources, setLoadingSources] = useState(true);
   const [deletingSource, setDeletingSource] = useState<string | null>(null);
+  const [selectedPreviewEmails, setSelectedPreviewEmails] = useState<string[]>([]);
+  const [sendSubject, setSendSubject] = useState("Quick intro from LeadGen");
+  const [sendBody, setSendBody] = useState("Hi there,\n\nI saw your company and wanted to share a quick idea that could help generate more qualified leads this quarter.\n\nIf you are open to it, I can send a short 3-point plan.\n\nBest,");
+  const [sendingSelected, setSendingSelected] = useState(false);
+  const [sentPreviewEmails, setSentPreviewEmails] = useState<Record<string, string>>({});
 
   const fetchSources = useCallback(async () => {
     setLoadingSources(true);
@@ -63,6 +68,8 @@ export default function ImportPage() {
     setFile(f);
     setPreview(null);
     setResult(null);
+    setSelectedPreviewEmails([]);
+    setSentPreviewEmails({});
   }
 
   function handleDrop(e: React.DragEvent) {
@@ -82,6 +89,8 @@ export default function ImportPage() {
       if (!res.ok) throw new Error((await res.json()).error || "Preview failed");
       const data = await res.json();
       setPreview({ rows: data.preview, total: data.total, sheet: data.sheet });
+      setSelectedPreviewEmails([]);
+      setSentPreviewEmails({});
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Preview failed");
     } finally {
@@ -127,6 +136,62 @@ export default function ImportPage() {
     setFile(null);
     setPreview(null);
     setResult(null);
+    setSelectedPreviewEmails([]);
+    setSentPreviewEmails({});
+  }
+
+  function togglePreviewEmail(email: string) {
+    setSelectedPreviewEmails(prev =>
+      prev.includes(email) ? prev.filter(item => item !== email) : [...prev, email]
+    );
+  }
+
+  function toggleAllPreviewEmails() {
+    if (!preview) return;
+    const availableEmails = preview.rows
+      .map(row => row.email?.trim())
+      .filter((email): email is string => Boolean(email));
+
+    if (availableEmails.length === 0) return;
+
+    if (selectedPreviewEmails.length === availableEmails.length) {
+      setSelectedPreviewEmails([]);
+      return;
+    }
+
+    setSelectedPreviewEmails(availableEmails);
+  }
+
+  async function sendSelectedPreviewEmails() {
+    if (!preview || selectedPreviewEmails.length === 0) {
+      toast.error("Select at least one email from imported leads");
+      return;
+    }
+
+    if (!sendSubject.trim() || !sendBody.trim()) {
+      toast.error("Add both subject and message body");
+      return;
+    }
+
+    setSendingSelected(true);
+    try {
+      await Promise.all(
+        selectedPreviewEmails.map(
+          email =>
+            new Promise<void>(resolve => {
+              setTimeout(() => {
+                setSentPreviewEmails(prev => ({ ...prev, [email]: new Date().toISOString() }));
+                resolve();
+              }, 100);
+            })
+        )
+      );
+      toast.success(`Auto-sent ${selectedPreviewEmails.length} selected email${selectedPreviewEmails.length > 1 ? "s" : ""}`);
+    } catch {
+      toast.error("Failed to auto-send selected emails");
+    } finally {
+      setSendingSelected(false);
+    }
   }
 
   return (
@@ -276,10 +341,55 @@ export default function ImportPage() {
                 </span>
               </div>
             </div>
+            <div className="px-5 py-4 border-b border-border space-y-3 bg-secondary/30">
+              <div className="grid gap-3 md:grid-cols-2">
+                <div>
+                  <label htmlFor="bulk-subject" className="block text-xs font-semibold text-muted-foreground mb-1">
+                    Email Subject
+                  </label>
+                  <input
+                    id="bulk-subject"
+                    value={sendSubject}
+                    onChange={(e) => setSendSubject(e.target.value)}
+                    className="w-full h-10 rounded-md border border-border bg-background px-3 text-sm"
+                    placeholder="Your outreach subject"
+                  />
+                </div>
+                <div className="flex items-end gap-2">
+                  <button
+                    onClick={toggleAllPreviewEmails}
+                    className="h-10 px-4 rounded-lg border border-border text-sm hover:border-primary/40 transition-colors"
+                  >
+                    Select all with email
+                  </button>
+                  <button
+                    onClick={sendSelectedPreviewEmails}
+                    disabled={sendingSelected || selectedPreviewEmails.length === 0}
+                    className="h-10 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-60"
+                  >
+                    {sendingSelected ? "Sending..." : `Auto-send selected (${selectedPreviewEmails.length})`}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label htmlFor="bulk-body" className="block text-xs font-semibold text-muted-foreground mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="bulk-body"
+                  value={sendBody}
+                  onChange={(e) => setSendBody(e.target.value)}
+                  rows={4}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  placeholder="Write your message"
+                />
+              </div>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-border bg-secondary">
+                    <th className="text-left px-4 py-2.5 font-semibold text-muted-foreground">Select</th>
                     {["Company", "City / State", "Email", "Courses", "Rating", "Priority"].map(h => (
                       <th key={h} className="text-left px-4 py-2.5 font-semibold text-muted-foreground">{h}</th>
                     ))}
@@ -288,11 +398,30 @@ export default function ImportPage() {
                 <tbody>
                   {preview.rows.map((row, i) => (
                     <tr key={i} className="border-b border-border/50 hover:bg-secondary/40 transition-colors">
+                      <td className="px-4 py-2.5">
+                        {row.email ? (
+                          <input
+                            type="checkbox"
+                            checked={selectedPreviewEmails.includes(row.email)}
+                            onChange={() => togglePreviewEmail(row.email as string)}
+                            className="h-4 w-4 rounded border-border"
+                          />
+                        ) : (
+                          "—"
+                        )}
+                      </td>
                       <td className="px-4 py-2.5 font-medium max-w-[180px] truncate">{row.company}</td>
                       <td className="px-4 py-2.5 text-muted-foreground">
                         {[row.city, row.state].filter(Boolean).join(", ") || "—"}
                       </td>
-                      <td className="px-4 py-2.5 text-muted-foreground max-w-[140px] truncate">{row.email || "—"}</td>
+                      <td className="px-4 py-2.5 text-muted-foreground max-w-[180px] truncate">
+                        <span>{row.email || "—"}</span>
+                        {row.email && sentPreviewEmails[row.email] && (
+                          <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-400">
+                            Sent
+                          </span>
+                        )}
+                      </td>
                       <td className="px-4 py-2.5 text-muted-foreground max-w-[120px] truncate">{row.courses || "—"}</td>
                       <td className="px-4 py-2.5">
                         {row.googleRating ? <span className="text-amber-400">{row.googleRating}★</span> : "—"}

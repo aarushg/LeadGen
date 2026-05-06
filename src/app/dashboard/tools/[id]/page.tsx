@@ -24,6 +24,34 @@ import { toast } from 'sonner'
 import type { ToolImplementation } from '@/lib/tool-implementations'
 import type { Tool } from '@/lib/db'
 
+const TOOL_FEATURE_ROUTES: Record<string, string> = {
+  'Salesforce Marketing Cloud': '/dashboard/tools-features/salesforce-marketing-cloud',
+  Leadfeeder: '/dashboard/tools-features/leadfeeder',
+  UpLead: '/dashboard/tools-features/uplead',
+  Intercom: '/dashboard/tools-features/intercom',
+  Hunter: '/dashboard/tools-features/hunter',
+  Demio: '/dashboard/tools-features/demio',
+  Overloop: '/dashboard/tools-features/overloop',
+  'D&B Hoovers': '/dashboard/tools-features/dnb-hoovers',
+  'Agile CRM': '/dashboard/tools-features/agile-crm',
+  CallPage: '/dashboard/tools-features/callpage',
+  AeroLeads: '/dashboard/tools-features/aeroleads',
+  LeadFuze: '/dashboard/tools-features/leadfuze',
+  LeadsBridge: '/dashboard/tools-features/leadsbridge',
+  SalesWings: '/dashboard/tools-features/saleswings',
+  OptinMonster: '/dashboard/tools-features/optinmonster',
+  Dealfront: '/dashboard/tools-features/dealfront',
+  Sumo: '/dashboard/tools-features/sumo',
+  Extole: '/dashboard/tools-features/extole',
+  RollWorks: '/dashboard/tools-features/rollworks',
+  Pipedrive: '/dashboard/tools-features/pipedrive',
+  'Zendesk Sell': '/dashboard/tools-features/zendesk',
+  'HubSpot Marketing Hub': '/dashboard/tools-features/hubspot',
+  Mailchimp: '/dashboard/tools-features/mailchimp',
+  LeadGenScrape: '/dashboard/tools-features/apify-platform',
+  'Apify Platform': '/dashboard/tools-features/apify-platform',
+}
+
 export default function ToolDetailsPage() {
   const params = useParams() ?? {};
   const id = (params as { id?: string }).id ?? "";
@@ -34,6 +62,7 @@ export default function ToolDetailsPage() {
   const [runInput, setRunInput] = useState('{}')
   const [running, setRunning] = useState(false)
   const [runResult, setRunResult] = useState<Record<string, unknown> | null>(null)
+  const featureRoute = tool ? TOOL_FEATURE_ROUTES[tool.name] : undefined
 
   useEffect(() => {
     async function loadToolData() {
@@ -406,6 +435,11 @@ export default function ToolDetailsPage() {
         <Button asChild>
           <Link href={`/research?company=${encodeURIComponent(tool.name)}`}>Research This Tool</Link>
         </Button>
+        {featureRoute && (
+          <Button asChild variant="secondary">
+            <Link href={featureRoute}>Open Interactive Workflow</Link>
+          </Button>
+        )}
         <Button asChild variant="outline">
           <Link href="/dashboard/tools/analytics">Open Tool Analytics</Link>
         </Button>

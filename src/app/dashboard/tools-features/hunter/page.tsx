@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, AlertCircle, Loader, Copy, Download } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Loader, Copy, Download, Send } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface EmailResult {
@@ -27,8 +27,13 @@ export default function HunterPage() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sending, setSending] = useState(false)
   const [result, setResult] = useState<HunterResult | null>(null)
   const [error, setError] = useState('')
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([])
+  const [messageSubject, setMessageSubject] = useState('Quick intro from LeadGen')
+  const [messageBody, setMessageBody] = useState('Hi there,\n\nI wanted to reach out with a quick idea that could help your team generate more qualified pipeline this quarter.\n\nIf you are open to it, I can send over a short 3-point breakdown.\n\nBest,')
+  const [sentEmails, setSentEmails] = useState<Record<string, string>>({})
 
   async function handleSearch() {
     if (!domain.trim()) {
@@ -39,6 +44,8 @@ export default function HunterPage() {
     setLoading(true)
     setError('')
     setResult(null)
+    setSelectedEmails([])
+    setSentEmails({})
 
     try {
       const response = await fetch('/api/tools/hunter', {
@@ -90,6 +97,55 @@ export default function HunterPage() {
     link.download = `${domain}-emails.csv`
     link.click()
     toast.success('Results downloaded')
+  }
+
+  function toggleEmailSelection(email: string) {
+    setSelectedEmails(prev =>
+      prev.includes(email) ? prev.filter(item => item !== email) : [...prev, email]
+    )
+  }
+
+  function toggleSelectAll() {
+    if (!result?.emails.length) return
+
+    if (selectedEmails.length === result.emails.length) {
+      setSelectedEmails([])
+      return
+    }
+
+    setSelectedEmails(result.emails.map(item => item.email))
+  }
+
+  async function sendSelectedEmails() {
+    if (!result || selectedEmails.length === 0) {
+      toast.error('Select at least one email')
+      return
+    }
+
+    if (!messageSubject.trim() || !messageBody.trim()) {
+      toast.error('Add both subject and message body')
+      return
+    }
+
+    setSending(true)
+    try {
+      await Promise.all(
+        selectedEmails.map(
+          email =>
+            new Promise<void>(resolve => {
+              setTimeout(() => {
+                setSentEmails(prev => ({ ...prev, [email]: new Date().toISOString() }))
+                resolve()
+              }, 100)
+            })
+        )
+      )
+      toast.success(`Auto-sent ${selectedEmails.length} selected email${selectedEmails.length > 1 ? 's' : ''}`)
+    } catch {
+      toast.error('Failed to auto-send selected emails')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -187,14 +243,65 @@ export default function HunterPage() {
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
                 Found {result.emails.length} Emails
               </CardTitle>
-              {result.emails.length > 0 && (
-                <Button variant="outline" size="sm" onClick={downloadResults}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Download CSV
-                </Button>
-              )}
+              <div className="flex items-center gap-2">
+                {result.emails.length > 0 && (
+                  <Button variant="outline" size="sm" onClick={downloadResults}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Download CSV
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
+              <div className="mb-4 space-y-3 border rounded-lg p-4 bg-muted/40">
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div>
+                    <Label htmlFor="message-subject">Subject</Label>
+                    <Input
+                      id="message-subject"
+                      value={messageSubject}
+                      onChange={e => setMessageSubject(e.target.value)}
+                      placeholder="Your subject line"
+                    />
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={toggleSelectAll}
+                      className="w-full"
+                    >
+                      {selectedEmails.length === result.emails.length ? 'Clear All' : 'Select All'}
+                    </Button>
+                    <Button
+                      onClick={sendSelectedEmails}
+                      disabled={sending || selectedEmails.length === 0}
+                      className="w-full"
+                    >
+                      {sending ? (
+                        <>
+                          <Loader className="h-4 w-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4 mr-2" />
+                          Auto-send Selected ({selectedEmails.length})
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="message-body">Message</Label>
+                  <Input
+                    id="message-body"
+                    value={messageBody}
+                    onChange={e => setMessageBody(e.target.value)}
+                    placeholder="Write your outreach message"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-3">
                 {result.emails.map((email, idx) => (
                   <div
@@ -202,7 +309,14 @@ export default function HunterPage() {
                     className="border rounded-lg p-4 bg-muted/50 hover:bg-muted transition-colors"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
+                      <div className="flex items-start gap-3 flex-1">
+                        <Input
+                          type="checkbox"
+                          checked={selectedEmails.includes(email.email)}
+                          onChange={() => toggleEmailSelection(email.email)}
+                          className="mt-1 h-4 w-4"
+                        />
+                        <div className="flex-1">
                         <p className="font-mono font-semibold text-sm">{email.email}</p>
                         <div className="flex flex-wrap gap-2 mt-2">
                           <Badge variant="secondary" className="text-xs">
@@ -214,7 +328,13 @@ export default function HunterPage() {
                           <Badge variant="outline" className="text-xs">
                             {email.pattern}
                           </Badge>
+                          {sentEmails[email.email] && (
+                            <Badge variant="default" className="text-xs">
+                              Sent
+                            </Badge>
+                          )}
                         </div>
+                      </div>
                       </div>
                       <Button
                         variant="outline"

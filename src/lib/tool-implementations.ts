@@ -27,6 +27,140 @@ export interface ToolImplementation {
 }
 
 export const toolImplementations: Record<string, ToolImplementation> = {
+  LeadGenScrape: {
+    id: 'd2e3a414-2f71-44ad-a66e-f5c5515d6c36',
+    name: 'LeadGenScrape',
+    pricingModel: 'Prepaid usage credits + marketplace rentals + proxy usage',
+    startingPrice: 'Free tier, paid plans from $29/month',
+    bestFor: ['Web scraping teams', 'Lead generation pipelines', 'AI agents and RAG ingestion'],
+    integrations: ['Zapier', 'Make', 'Google Sheets', 'Slack', 'Google Drive', 'Pinecone', 'GitHub', 'Airbyte', 'LangChain', 'LlamaIndex', 'MCP'],
+    setupComplexity: 'moderate',
+    setupTime: '1-2 days',
+    apiSupport: true,
+    webappOnly: false,
+    implementationSteps: [
+      {
+        title: 'Create LeadGenScrape workspace and token',
+        description: 'Set up a LeadGenScrape account, create an API token, and choose the right plan based on compute, proxies, and concurrency needs.',
+      },
+      {
+        title: 'Design the Actor interface',
+        description: 'Define the input schema, output shape, and execution mode so scrapers can run on-demand, on a schedule, or in standby API mode.',
+      },
+      {
+        title: 'Build the crawler runtime',
+        description: 'Implement the actor with Crawlee, Playwright, Puppeteer, Cheerio, or Python crawlers, then package it for LeadGenScrape Docker runtime.',
+      },
+      {
+        title: 'Configure proxies and storage',
+        description: 'Attach residential or datacenter proxies, enable session handling, and map output into datasets, key-value stores, and request queues.',
+      },
+      {
+        title: 'Connect downstream workflows',
+        description: 'Use webhooks, REST API, marketplace actors, or MCP integrations to push fresh data into CRM, sheets, warehouses, vector DBs, and AI agents.',
+      },
+      {
+        title: 'Schedule and monitor production runs',
+        description: 'Create cron schedules, alerting, and log monitoring to track success rate, block rate, runtime cost, and output freshness over time.',
+      },
+    ],
+    useCases: [
+      'Google Maps and directory scraping for local lead generation',
+      'Website content crawling for RAG and AI knowledge bases',
+      'Social media monitoring across Instagram, TikTok, Facebook, and LinkedIn',
+      'Competitor intelligence, pricing surveillance, and catalog monitoring',
+      'Actor marketplace monetization for reusable internal or public scrapers',
+    ],
+    alternativesTool: 'Bright Data',
+    pros: [
+      'Managed runtime removes most infrastructure work for scraping and automation',
+      'Actor model supports reusable, long-running jobs beyond normal HTTP limits',
+      'Integrated proxies, storage primitives, scheduling, and monitoring reduce operational overhead',
+      'Strong ecosystem around Crawlee, templates, APIs, and marketplace distribution',
+      'MCP support makes actor execution usable inside agent workflows',
+    ],
+    cons: [
+      'Usage-based proxy and compute costs can rise quickly on heavy crawls',
+      'Complex protected targets still require careful anti-blocking strategy',
+      'Marketplace quality varies, so third-party actors need vetting',
+      'Custom actor development still requires scraper engineering discipline and maintenance',
+    ],
+    successMetrics: [
+      'Successful actor run rate',
+      'Cost per completed dataset or lead batch',
+      'Blocked request and retry rate',
+      'Freshness of scraped data delivered downstream',
+      'Time from crawl completion to CRM, warehouse, or AI availability',
+    ],
+    documentationUrl: 'https://docs.apify.com/',
+  },
+  'Apify Platform': {
+    id: 'd2e3a414-2f71-44ad-a66e-f5c5515d6c36',
+    name: 'LeadGenScrape',
+    pricingModel: 'Prepaid usage credits + marketplace rentals + proxy usage',
+    startingPrice: 'Free tier, paid plans from $29/month',
+    bestFor: ['Web scraping teams', 'Lead generation pipelines', 'AI agents and RAG ingestion'],
+    integrations: ['Zapier', 'Make', 'Google Sheets', 'Slack', 'Google Drive', 'Pinecone', 'GitHub', 'Airbyte', 'LangChain', 'LlamaIndex', 'MCP'],
+    setupComplexity: 'moderate',
+    setupTime: '1-2 days',
+    apiSupport: true,
+    webappOnly: false,
+    implementationSteps: [
+      {
+        title: 'Create LeadGenScrape workspace and token',
+        description: 'Set up a LeadGenScrape account, create an API token, and choose the right plan based on compute, proxies, and concurrency needs.',
+      },
+      {
+        title: 'Design the Actor interface',
+        description: 'Define the input schema, output shape, and execution mode so scrapers can run on-demand, on a schedule, or in standby API mode.',
+      },
+      {
+        title: 'Build the crawler runtime',
+        description: 'Implement the actor with Crawlee, Playwright, Puppeteer, Cheerio, or Python crawlers, then package it for LeadGenScrape Docker runtime.',
+      },
+      {
+        title: 'Configure proxies and storage',
+        description: 'Attach residential or datacenter proxies, enable session handling, and map output into datasets, key-value stores, and request queues.',
+      },
+      {
+        title: 'Connect downstream workflows',
+        description: 'Use webhooks, REST API, marketplace actors, or MCP integrations to push fresh data into CRM, sheets, warehouses, vector DBs, and AI agents.',
+      },
+      {
+        title: 'Schedule and monitor production runs',
+        description: 'Create cron schedules, alerting, and log monitoring to track success rate, block rate, runtime cost, and output freshness over time.',
+      },
+    ],
+    useCases: [
+      'Google Maps and directory scraping for local lead generation',
+      'Website content crawling for RAG and AI knowledge bases',
+      'Social media monitoring across Instagram, TikTok, Facebook, and LinkedIn',
+      'Competitor intelligence, pricing surveillance, and catalog monitoring',
+      'Actor marketplace monetization for reusable internal or public scrapers',
+    ],
+    alternativesTool: 'Bright Data',
+    pros: [
+      'Managed runtime removes most infrastructure work for scraping and automation',
+      'Actor model supports reusable, long-running jobs beyond normal HTTP limits',
+      'Integrated proxies, storage primitives, scheduling, and monitoring reduce operational overhead',
+      'Strong ecosystem around Crawlee, templates, APIs, and marketplace distribution',
+      'MCP support makes actor execution usable inside agent workflows',
+    ],
+    cons: [
+      'Usage-based proxy and compute costs can rise quickly on heavy crawls',
+      'Complex protected targets still require careful anti-blocking strategy',
+      'Marketplace quality varies, so third-party actors need vetting',
+      'Custom actor development still requires scraper engineering discipline and maintenance',
+    ],
+    successMetrics: [
+      'Successful actor run rate',
+      'Cost per completed dataset or lead batch',
+      'Blocked request and retry rate',
+      'Freshness of scraped data delivered downstream',
+      'Time from crawl completion to CRM, warehouse, or AI availability',
+    ],
+    documentationUrl: 'https://docs.apify.com/',
+  },
   'Salesforce Marketing Cloud': {
     id: '62daad5f-217c-48fa-b8c2-9fc559fed99e',
     name: 'Salesforce Marketing Cloud',

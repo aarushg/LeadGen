@@ -387,6 +387,70 @@ export const db = {
     async seedIfEmpty(data: Array<Omit<Tool, 'id' | 'created_at' | 'updated_at'>>): Promise<Tool[]> {
       const state = await read()
       if (state.tools.length > 0) {
+        const existingNames = new Set(state.tools.map((tool) => tool.name.toLowerCase()))
+        const existingByWebsite = new Map(
+          state.tools
+            .filter((tool) => Boolean(tool.website))
+            .map((tool) => [String(tool.website).toLowerCase(), tool])
+        )
+        const now = new Date().toISOString()
+        let hasUpdates = false
+
+        for (const item of data) {
+          if (existingNames.has(item.name.toLowerCase())) {
+            continue
+          }
+
+          const websiteKey = item.website?.toLowerCase()
+          if (!websiteKey) {
+            continue
+          }
+
+          const existing = existingByWebsite.get(websiteKey)
+          if (!existing) {
+            continue
+          }
+
+          const changed =
+            existing.name !== item.name ||
+            existing.type !== item.type ||
+            existing.bestFor !== item.bestFor ||
+            existing.summary !== item.summary ||
+            JSON.stringify(existing.keyFeatures) !== JSON.stringify(item.keyFeatures)
+
+          if (!changed) {
+            continue
+          }
+
+          existing.name = item.name
+          existing.type = item.type
+          existing.bestFor = item.bestFor
+          existing.keyFeatures = item.keyFeatures
+          existing.summary = item.summary
+          existing.website = item.website
+          existing.updated_at = now
+          existingNames.add(item.name.toLowerCase())
+          hasUpdates = true
+        }
+
+        const missing = data
+          .filter((item) => !existingNames.has(item.name.toLowerCase()))
+          .map((item) => ({
+            ...item,
+            id: randomUUID(),
+            created_at: now,
+            updated_at: now,
+          }))
+
+        if (missing.length > 0) {
+          state.tools.push(...missing)
+          hasUpdates = true
+        }
+
+        if (hasUpdates) {
+          await enqueueWrite(state)
+        }
+
         return [...state.tools].sort((a, b) => a.name.localeCompare(b.name))
       }
 

@@ -49,6 +49,15 @@ export const leadGenerationMustHaveFeatures = [
 
 export const leadGenerationTools: LeadTool[] = [
   {
+    name: 'LeadGenScrape',
+    type: 'Web Scraping & Data Platform',
+    bestFor: 'Cloud scraping, actor-based automation, and AI-ready data pipelines',
+    keyFeatures: ['Actor marketplace', 'Managed proxies and anti-blocking', 'Datasets, KV store, and request queues'],
+    summary:
+      'API-first scraping platform for running reusable actors, storing structured output, and feeding fresh web data into lead gen and AI workflows.',
+    website: 'https://apify.com/',
+  },
+  {
     name: 'Salesforce Marketing Cloud',
     type: 'Marketing Automation',
     bestFor: 'Enterprise-level lead generation',
